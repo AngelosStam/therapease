@@ -5,13 +5,13 @@ Below is a detailed overview of what TherapEase offers—first from the therapis
 
 ### For the Therapist
 
-**One-Time Setup & Secure Login**
+***One-Time Setup & Secure Login***
 
 - The therapist registers using their special email (angelos_stamatis@outlook.com) and chooses a password at first login.
 - Their account is automatically approved and given the therapist role (no waiting).
 - Subsequent logins use JWT-backed auth, keeping sessions secure.
 
-**Centralized Dashboard (“Appointments” Tab)**
+***Centralized Dashboard (“Appointments” Tab)***
 
 Appointment Requests: The therapist sees every pending request from guests or registered clients in a sortable table.
 
@@ -26,7 +26,7 @@ Columns include:
 - Actions – “Modify,” “Approve,” or “Cancel.”
 - Approving automatically moves the entry into upcoming sessions and sends the client notification.
 
-Upcoming Sessions that the therapist has with clients.
+Upcoming Sessions: The sessions that the therapist has with clients.
 
 A calendar view showing approved sessions:
 
@@ -35,21 +35,21 @@ A calendar view showing approved sessions:
 - From there you can modify or cancel any session in-line.
 - Month-by-month navigation, responsive mobile-friendly grid.
 
-**Client Management (“MyAccount” Tab → Clients & Access Management)**
+***Client Management (“MyAccount” Tab → Clients & Access Management)***
 
-Clients
+Clients:
 
 - Lists all approved clients with registration date.
 - “Session History” button per client opens a card showing every past session (date & time).
 
-Access Management
+Access Management:
 
 - Shows pending registration requests from new clients.
 - Approve or reject with one click; approved clients immediately gain full access.
 
 ### For the Client
 
-**A. Guest (First Appointment)**
+***A. Guest (First Appointment)***
 
 Book an Appointment
 
@@ -62,7 +62,7 @@ Approval Workflow
 
 - The therapist reviews your request, proposes/approves a final date & time, and you receive email confirmation.
 
-**B. Registered Client (Ongoing Care)**
+***B. Registered Client (Ongoing Care)***
 
 Registration
 
