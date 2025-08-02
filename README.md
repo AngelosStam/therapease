@@ -5,60 +5,60 @@ Below is a detailed overview of what TherapEase offers—first from the therapis
 
 **For the Therapist**
 
-    One-Time Setup & Secure Login
-        The therapist registers using their special email (angelos_stamatis@outlook.com) and chooses a password at first login.
-        Their account is automatically approved and given the therapist role (no waiting).
-        Subsequent logins use JWT-backed auth, keeping sessions secure.
+One-Time Setup & Secure Login
+    The therapist registers using their special email (angelos_stamatis@outlook.com) and chooses a password at first login.
+    Their account is automatically approved and given the therapist role (no waiting).
+    Subsequent logins use JWT-backed auth, keeping sessions secure.
 
-    Centralized Dashboard (“Appointments” Tab)
+Centralized Dashboard (“Appointments” Tab)
 
-        Appointment Requests
+    Appointment Requests
 
-            See every pending request from guests or registered clients in a sortable table.
+        See every pending request from guests or registered clients in a sortable table.
 
-            Columns include:
+        Columns include:
 
-                Client/Guest – distinguishes existing clients vs one-time guests.
-                Full Name & Phone Number.
-                Email.
-                Requested On – timestamp of when the request arrived.
-                Proposed Date & Time (you can edit in-line).
-                Message – expandable card for longer notes.
-                Actions – “Modify,” “Approve,” or “Cancel.”
+            Client/Guest – distinguishes existing clients vs one-time guests.
+            Full Name & Phone Number.
+            Email.
+            Requested On – timestamp of when the request arrived.
+            Proposed Date & Time (you can edit in-line).
+            Message – expandable card for longer notes.
+            Actions – “Modify,” “Approve,” or “Cancel.”
 
-            Approving automatically moves the entry into upcoming sessions and sends the client notification.
+        Approving automatically moves the entry into upcoming sessions and sends the client notification.
 
-        Upcoming Sessions
+    Upcoming Sessions
 
-            A calendar view showing approved sessions:
+        A calendar view showing approved sessions:
 
-                Days with dots indicate appointments.
-                Clicking a date reveals a details card with that day’s sessions.
-                From there you can modify or cancel any session in-line.
+            Days with dots indicate appointments.
+            Clicking a date reveals a details card with that day’s sessions.
+            From there you can modify or cancel any session in-line.
 
-            Month-by-month navigation, responsive mobile-friendly grid.
+        Month-by-month navigation, responsive mobile-friendly grid.
 
-    Client Management (“MyAccount” Tab → Clients & Access Management)
+Client Management (“MyAccount” Tab → Clients & Access Management)
 
-        Clients
+    Clients
 
-            Lists all approved clients with registration date.
-            “Session History” button per client opens a card showing every past session (date & time).
+        Lists all approved clients with registration date.
+        “Session History” button per client opens a card showing every past session (date & time).
 
-        Access Management
+    Access Management
 
-            Shows pending registration requests from new clients.
-            Approve or reject with one click; approved clients immediately gain full access.
+        Shows pending registration requests from new clients.
+        Approve or reject with one click; approved clients immediately gain full access.
 
-    Library & Materials Upload
+Library & Materials Upload
 
-        (If desired) Upload worksheets, handouts, and psychoeducational materials in the Library tab (therapist-only).
-        Materials display as cards for clients to browse or download.
+    (If desired) Upload worksheets, handouts, and psychoeducational materials in the Library tab (therapist-only).
+    Materials display as cards for clients to browse or download.
 
-    “My Account” & Branding
+“My Account” & Branding
 
-        Your name appears top right once logged in.
-        Uniform, calming UI with therapy-inspired color palette and fade-in cards.
+    Your name appears top right once logged in.
+    Uniform, calming UI with therapy-inspired color palette and fade-in cards.
 
 **For the Client**
 
