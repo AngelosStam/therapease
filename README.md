@@ -5,7 +5,7 @@ Below is a detailed overview of what TherapEase offers—first from the therapis
 
 ***For the Therapist***
 
-One-Time Setup & Secure Login
+One-Time Setup & Secure Login:
 
 - The therapist registers using their special email (angelos_stamatis@outlook.com) and chooses a password at first login.
 - Their account is automatically approved and given the therapist role (no waiting).
@@ -13,52 +13,43 @@ One-Time Setup & Secure Login
 
 **Centralized Dashboard (“Appointments” Tab)**
 
--**Appointment Requests**
-
-See every pending request from guests or registered clients in a sortable table.
+-Appointment Requests: The therapist sees every pending request from guests or registered clients in a sortable table.
 
 Columns include:
 
-Client/Guest – distinguishes existing clients vs one-time guests.
+- Client/Guest – distinguishes existing clients vs one-time guests.
 - Full Name & Phone Number.
 - Email.
 - Requested On – timestamp of when the request arrived.
 - Proposed Date & Time (you can edit in-line).
 - Message – expandable card for longer notes.
 - Actions – “Modify,” “Approve,” or “Cancel.”
+- Approving automatically moves the entry into upcoming sessions and sends the client notification.
 
-Approving automatically moves the entry into upcoming sessions and sends the client notification.
-
--**Upcoming Sessions**
+-Upcoming Sessions:
 
 A calendar view showing approved sessions:
 
 - Days with dots indicate appointments.
 - Clicking a date reveals a details card with that day’s sessions.
 - From there you can modify or cancel any session in-line.
-
-Month-by-month navigation, responsive mobile-friendly grid.
+- Month-by-month navigation, responsive mobile-friendly grid.
 
 **Client Management (“MyAccount” Tab → Clients & Access Management)**
 
-Clients
+-Clients
 
 - Lists all approved clients with registration date.
 - “Session History” button per client opens a card showing every past session (date & time).
 
-Access Management
+-Access Management
 
 - Shows pending registration requests from new clients.
 - Approve or reject with one click; approved clients immediately gain full access.
 
-“My Account” & Branding
-
-- Your name appears top right once logged in.
-- Uniform, calming UI with therapy-inspired color palette and fade-in cards.
-
 ***For the Client***
 
-*A. Guest (First Appointment)*
+**A. Guest (First Appointment)**
 
 Book an Appointment
 - Accessible without registration under “Book an Appointment.”
@@ -70,7 +61,7 @@ Approval Workflow
 
 - The therapist reviews your request, proposes/approves a final date & time, and you receive email confirmation.
 
-*B. Registered Client (Ongoing Care)*
+**B. Registered Client (Ongoing Care)**
 
 Registration
 
@@ -87,9 +78,9 @@ Streamlined Recurrent Booking
 
 - When scheduling, you can opt-in to “Recurrent Sessions” (e.g. weekly), automatically creating repeated appointments.
 
-**How It Works (Workflows)**
+***How It Works (Workflows)***
 
-*Therapist Workflow*
+**Therapist Workflow**
 
 - Log in → land on Home.
 - Click Appointments → see Requests tab.
@@ -98,7 +89,7 @@ Streamlined Recurrent Booking
 - Use MyAccount → Clients to view client list & open history cards.
 - Use MyAccount → Access Management to handle new client registrations.
 
-*Guest→Client Workflow*
+**Guest→Client Workflow**
 
 - Guest visits Home → clicks Book an Appointment → views info card → submits request.
 - Therapist approves → you receive email → attend free consultation.
