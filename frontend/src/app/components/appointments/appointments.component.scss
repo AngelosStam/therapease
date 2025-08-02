@@ -15,15 +15,15 @@
     border-radius: var(--border-radius);
     padding: 2rem;
     margin: 5rem auto;
-    max-width: 1000px;
+    max-width: 1500px;
+    align-items: center;
+    text-align: center;
 }
 
 /* Subtabs */
 .tabs {
     display: flex;
-    margin-bottom: 1rem;
-    align-content: center;
-    max-width: 900px;
+    margin-bottom: 2rem;
 }
 
 .tabs button {
@@ -58,13 +58,48 @@ th,
 td {
     padding: 0.5rem;
     border-bottom: 1px solid var(--color-border);
-    text-align: left;
+    text-align: center;
     color: var(--color-text);
 }
 
-th:nth-child(n),
-td:nth-child(n) {
-    width: calc(100% / 7);
+th:nth-child(1),
+td:nth-child(1) {
+    width: 10%;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+    width: 13%;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+    width: 12.5%;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+    width: 20%;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+    width: 11.5%;
+}
+
+th:nth-child(6),
+td:nth-child(6) {
+    width: 15%;
+}
+
+th:nth-child(7),
+td:nth-child(7) {
+    width: 8%;
+}
+
+th:nth-child(8),
+td:nth-child(8) {
+    width: 10%;
 }
 
 /* Message card */

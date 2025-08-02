@@ -17,7 +17,8 @@
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>E-mail</th>
                         <th>Since</th>
                         <th>Action</th>
                     </tr>
@@ -26,6 +27,7 @@
                     <ng-container *ngFor="let c of clients">
                         <tr>
                             <td>{{ c.name }}</td>
+                            <td>{{ c.phone }}</td>
                             <td>{{ c.email }}</td>
                             <td>{{ c.createdAt | date:'mediumDate' }}</td>
                             <td>
@@ -35,7 +37,7 @@
                             </td>
                         </tr>
                         <tr *ngIf="showHistoryClientId===c._id">
-                            <td colspan="4">
+                            <td colspan="5">
                                 <div class="session-history-card">
                                     <h4>History for {{ c.name }}</h4>
                                     <ul *ngIf="sessionsByClient.length; else noHistory">
@@ -88,9 +90,7 @@
     </ng-container>
 
     <!-- Client view -->
-
     <ng-template #clientView>
-
         <h2>Session History</h2>
         <div *ngIf="userSessions.length; else noSessions">
             <ul>
@@ -103,7 +103,5 @@
         <ng-template #noSessions>
             <p>You have no sessions yet.</p>
         </ng-template>
-
     </ng-template>
-
 </div>

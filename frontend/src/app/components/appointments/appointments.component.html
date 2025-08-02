@@ -1,3 +1,4 @@
+<!-- src/app/components/appointments/appointments.component.html -->
 <div class="wide-card">
 
     <!-- Subtabs -->
@@ -19,6 +20,7 @@
                     <th>Client/Guest</th>
                     <th>Full Name</th>
                     <th>Phone Number</th>
+                    <th>Email</th>
                     <th>Requested On</th>
                     <th>Proposed Date &amp; Time</th>
                     <th>Message</th>
@@ -31,6 +33,7 @@
                         <td>{{ r.client ? 'Client' : 'Guest' }}</td>
                         <td>{{ r.client?.name || r.guestName }}</td>
                         <td>{{ r.client?.phone || r.guestPhone || '—' }}</td>
+                        <td>{{ r.client?.email || r.guestEmail || '—' }}</td>
                         <td>{{ r.createdAt | date:'short' }}</td>
                         <td>
                             <ng-container *ngIf="editingRequestId!==r._id; else editReq">
@@ -40,7 +43,7 @@
                             </ng-container>
                             <ng-template #editReq>
                                 <input type="datetime-local" [(ngModel)]="editRequestDate"
-                                    title="Select new date & time" />
+                                    title="Select new date &amp; time" />
                             </ng-template>
                         </td>
                         <td>
@@ -50,8 +53,8 @@
                         </td>
                         <td>
                             <ng-container *ngIf="editingRequestId!==r._id; else saveReq">
-                                <button (click)="approve(r._id)">Approve</button>
                                 <button (click)="startEditRequest(r._id)">Modify</button>
+                                <button (click)="approve(r._id)">Approve</button>
                                 <button (click)="cancelRequest(r._id)">Cancel</button>
                             </ng-container>
                         </td>
@@ -59,7 +62,7 @@
 
                     <ng-template #saveReq>
                         <tr>
-                            <td colspan="7">
+                            <td colspan="8">
                                 <button (click)="saveEditRequest(editingRequestId!)">
                                     Save
                                 </button>
@@ -69,7 +72,7 @@
                     </ng-template>
 
                     <tr *ngIf="selectedMessageId===r._id">
-                        <td colspan="7">
+                        <td colspan="8">
                             <div class="message-card">
                                 {{ r.message || '(no message)' }}
                             </div>
@@ -118,8 +121,11 @@
             </ul>
 
             <ng-template #editUp>
-                <input type="datetime-local" [(ngModel)]="editUpcomingDate" title="Select new session date & time" />
-                <button (click)="saveEditUpcoming(editingUpcomingId!)">Save</button>
+                <input type="datetime-local" [(ngModel)]="editUpcomingDate"
+                    title="Select new session date &amp; time" />
+                <button (click)="saveEditUpcoming(editingUpcomingId!)">
+                    Save
+                </button>
                 <button (click)="cancelEditUpcoming()">Cancel</button>
             </ng-template>
         </div>
