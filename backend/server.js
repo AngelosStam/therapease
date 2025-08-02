@@ -1,8 +1,11 @@
 // backend/server.js
-require('dotenv').config();               // ← load .env at project root
+
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 const { authMiddleware } = require('./middleware/auth');
 const authRoutes = require('./routes/auth');
@@ -11,47 +14,51 @@ const appointmentRoutes = require('./routes/appointments');
 
 const app = express();
 
-// 1) CORS
+// Enable CORS for your Angular dev server
 app.use(cors({
-    origin: 'http://localhost:4200',       // your Angular dev URL
+    origin: 'http://localhost:4200',
     credentials: true
 }));
 
-// 2) JSON body parsing
+// Parse JSON bodies
 app.use(express.json());
 
-// 3) JWT decoding → req.user
+// Decode JWT if present → req.user
 app.use(authMiddleware);
 
-// 4) Mount all routers
-app.use('/api/auth', authRoutes);         // register & login
-app.use('/api/clients', clientsRoutes);      // approve/reject clients
-app.use('/api/appointments', appointmentRoutes);  // book & manage appointments
+// Serve Swagger UI from the static JSON spec
+app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument, { explorer: true })
+);
 
-// 5) 404 fallback
+// Mount API routers
+app.use('/api/auth', authRoutes);         // registration & login
+app.use('/api/clients', clientsRoutes);      // client approval/rejection
+app.use('/api/appointments', appointmentRoutes);  // appointment booking & management
+
+// 404 handler
 app.use((req, res) => {
-    res.status(404).json({
-        message: `Cannot ${req.method} ${req.originalUrl}`
-    });
+    res.status(404).json({ message: `Cannot ${req.method} ${req.originalUrl}` });
 });
 
-// 6) Error handler
+// Global error handler
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).json({ message: err.message || 'Server error' });
 });
 
-// 7) Connect to MongoDB & start
-const uri = process.env.MONGO_URI
-    || 'mongodb://127.0.0.1:27017/therapease';
-mongoose.connect(uri, {
+// Connect to MongoDB & start the server
+mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
     .then(() => {
         const port = process.env.PORT || 5000;
         app.listen(port, () =>
-            console.log(`Server running on port ${port}`));
+            console.log(`Server running on port ${port}`)
+        );
     })
     .catch(err => {
         console.error('MongoDB connection error:', err);
