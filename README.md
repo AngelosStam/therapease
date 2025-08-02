@@ -126,29 +126,27 @@ With TherapEase, the therapist enjoys a unified console for client & appointment
 
 **Backend**
 
-- Install dependencies
-```bash
-cd backend
-npm install
+- Install dependencies:  
+  ```bash
+  cd backend
+  npm install 
 
-*Run in development*
+- *Run in development*
+  ```bash
+  npm run dev
 
-npm run dev
-
-    Starts server with nodemon on port 5000.
-
-    API root: http://localhost:5000/api.
+Starts server with nodemon on port 5000.
+API root: http://localhost:5000/api.
 
 **Frontend**
 
-- Install dependencies
-```bash
-cd frontend
+- Install dependencies:  
+  ```bash
+  cd frontend
+  npm install
 
-npm install
+- *Run in development*
+  ```bash
+  npm start
 
-Run in development
-
-*npm start*
-
-    Launches ng serve --open on http://localhost:4200.
+Launches ng serve --open on http://localhost:4200.
