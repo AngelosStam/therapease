@@ -1,0 +1,97 @@
+/* src/app/components/book-appointment/book-appointment.component.scss */
+
+.wide-card {
+    max-width: 600px;
+    margin: 5rem auto;
+    padding: 2rem;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Info card shown only to guests */
+.info-card {
+    background: var(--color-secondary-bg, #eef6f9);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-card p {
+    margin: 0;
+}
+
+/* Heading */
+h2 {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+/* Form styling */
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+input,
+textarea {
+    padding: 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    transition: border-color 0.2s;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+button {
+    //align-self: center;
+    margin-top: 7px;
+    margin-left: 35%;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    background: none;
+    color: var(--color-primary);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+button:hover:not(:disabled) {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+button:disabled {
+    border-color: var(--color-border);
+    color: var(--color-primary);
+    cursor: not-allowed;
+}
+
+p.success {
+    color: green;
+    text-align: center;
+    font-weight: 500;
+}
+
+p.error {
+    color: red;
+    text-align: center;
+    font-weight: 500;
+}

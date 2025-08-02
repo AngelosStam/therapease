@@ -1,0 +1,21 @@
+<div class="wide-card">
+    <h2>Login</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <label>
+            E-mail *
+            <input formControlName="email" type="email" placeholder="you@example.com" title="Enter your email" />
+        </label>
+
+        <label>
+            Password *
+            <input formControlName="password" type="password" placeholder="••••••••" title="Enter your password" />
+        </label>
+
+        <button type="submit" [disabled]="form.invalid">
+            Login
+        </button>
+    </form>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+</div>

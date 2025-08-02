@@ -1,0 +1,91 @@
+/* src/app/components/navbar/navbar.component.scss */
+/* ------------------------------------------------ */
+
+/* Navbar container */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    background: transparent;
+    z-index: 1000;
+}
+
+/* Hamburger wrapper must enclose both icon and menu */
+.hamburger {
+    position: relative;
+}
+
+/* The clickable icon */
+.hamburger-icon {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+/* Dropdown menu */
+.menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    list-style: none;
+    padding: 0.5rem 0;
+    width: 215px;
+
+    /* Hidden by default */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+        visibility 0.2s,
+        opacity 0.2s,
+        transform 0.2s;
+}
+
+/* Visible when open */
+.menu.open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Menu items */
+.menu li {
+    margin: 0;
+}
+
+.menu li a,
+.menu li button {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    text-align: left;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.menu li a:hover,
+.menu li button:hover {
+    text-decoration: underline;
+}
+
+/* User greeting */
+.greeting {
+    color: var(--color-text);
+    font-weight: 500;
+}

@@ -1,0 +1,156 @@
+/* src/styles.scss */
+/* ---------------- */
+
+/* 1. Montserrat font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+/* 2. Minimal color variables */
+:root {
+    --font-family: 'Montserrat', sans-serif;
+    --color-primary: #5A7CA8;
+    --color-text: #333333;
+    --color-border: #EEEEEE;
+    --color-card-bg: #FFFFFF;
+    --border-radius: 8px;
+}
+
+/* 3. Global reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 4. Body with full-bleed hero image */
+body {
+    font-family: var(--font-family);
+    color: var(--color-text);
+    background: url('assets/hero-background-wide.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 5. Base card style (no shadows, minimal border) */
+.wide-card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    margin: 2rem auto;
+    max-width: 720px;
+}
+
+/* 6. Typography */
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: var(--font-family);
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+p,
+li,
+label {
+    line-height: 1.75;
+    color: var(--color-text);
+}
+
+/* 7. Links as text with underline on hover */
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: text-decoration 0.2s;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 8. Ghost / text buttons */
+button {
+    font-family: var(--font-family);
+    background: none;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+button:hover:not(:disabled) {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+button:disabled {
+    border-color: var(--color-border);
+    color: var(--color-border);
+    cursor: not-allowed;
+}
+
+/* 9. Form elements */
+input,
+textarea,
+select {
+    font-family: var(--font-family);
+    padding: 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    transition: border-color 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+/* 10. Utility wrappers */
+main,
+.content-wrapper {
+    padding: 1rem;
+    text-align: center;
+}
+
+.cards-wrapper app-wide-card .wide-card {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-in-out forwards;
+}
+
+.cards-wrapper app-wide-card:nth-child(1) .wide-card {
+    animation-delay: 0.2s;
+}
+
+.cards-wrapper app-wide-card:nth-child(2) .wide-card {
+    animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 11. Footer card, narrow to fit content */
+.footer-card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1.5rem 2rem;
+    display: inline-block;
+    margin: 2rem auto 3rem;
+    color: var(--color-text);
+    font-size: 0.9rem;
+}

@@ -1,0 +1,34 @@
+/* Global site header & spacing (from app.component.scss) */
+
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    z-index: 1000;
+    background: transparent;
+}
+
+.hamburger {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+
+    a {
+        color: #fff;
+        margin: 0.5rem 0;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+main {
+    padding-top: 5rem;
+}

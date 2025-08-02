@@ -1,0 +1,20 @@
+<nav class="navbar">
+    <div class="hamburger" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+        <button class="hamburger-icon" (click)="toggleMenu()">☰</button>
+        <ul class="menu" [class.open]="menuOpen">
+            <li><a routerLink="/">Home</a></li>
+            <li *ngIf="!auth.isTherapist"><a routerLink="/book">Book an Appointment</a></li>
+            <li *ngIf="!auth.isLoggedIn"><a routerLink="/register">Register</a></li>
+            <li *ngIf="!auth.isLoggedIn"><a routerLink="/login">Login</a></li>
+            <li *ngIf="auth.isTherapist"><a routerLink="/appointments">Appointments</a></li>
+            <!-- MyAccount for anyone logged in -->
+            <li *ngIf="auth.isLoggedIn"><a routerLink="/my-account">MyAccount</a></li>
+            <li *ngIf="auth.isLoggedIn">
+                <button (click)="logout()">Logout</button>
+            </li>
+        </ul>
+    </div>
+    <div class="greeting" *ngIf="auth.isLoggedIn">
+        {{ auth.user.name }}
+    </div>
+</nav>
