@@ -60,6 +60,7 @@ Below is a detailed overview of what TherapEase offers—first from the therapis
         Uniform, calming UI with therapy-inspired color palette and fade-in cards.
 
 **For the Client**
+
 *A. Guest (First Appointment)*
 
     Book an Appointment
@@ -90,6 +91,7 @@ Below is a detailed overview of what TherapEase offers—first from the therapis
         When scheduling, you can opt-in to “Recurrent Sessions” (e.g. weekly), automatically creating repeated appointments.
 
 **How It Works (Workflows)**
+
 *Therapist Workflow*
 
     Log in → land on Home.
