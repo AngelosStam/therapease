@@ -6,6 +6,7 @@ Below is a detailed overview of what TherapEase offers—first from the therapis
 **For the Therapist**
 
 One-Time Setup & Secure Login
+
     The therapist registers using their special email (angelos_stamatis@outlook.com) and chooses a password at first login.
     Their account is automatically approved and given the therapist role (no waiting).
     Subsequent logins use JWT-backed auth, keeping sessions secure.
