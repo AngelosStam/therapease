@@ -20,6 +20,7 @@ Below is a detailed overview of what TherapEase offers—first from the therapis
 
                 Client/Guest – distinguishes existing clients vs one-time guests.
                 Full Name & Phone Number.
+                Email.
                 Requested On – timestamp of when the request arrived.
                 Proposed Date & Time (you can edit in-line).
                 Message – expandable card for longer notes.
@@ -123,7 +124,7 @@ With TherapEase, the therapist enjoys a unified console for client & appointment
   ```bash
   npm install -g @angular/cli
 
-Backend
+**Backend**
 
     Configure environment
     Create a file backend/.env with:
@@ -134,27 +135,18 @@ PORT=5000
 
 Install dependencies
 
-cd backend
-npm install
+*cd backend*
+*npm install*
 
 Run in development
 
-npm run dev
+*npm run dev*
 
     Starts server with nodemon on port 5000.
 
     API root: http://localhost:5000/api.
 
-Build & run for production
-
-    # install pm2 or similar
-    npm install -g pm2
-
-    # build (no transpilation needed for pure JS)
-    # start under PM2
-    pm2 start server.js --name therapease-backend
-
-Frontend
+**Frontend**
 
     Configure API URL
     In frontend/src/environments/environment.ts set:
@@ -166,20 +158,11 @@ export const environment = {
 
 Install dependencies
 
-cd frontend
-npm install
+*cd frontend*
+*npm install*
 
 Run in development
 
-npm start
+*npm start*
 
     Launches ng serve --open on http://localhost:4200.
-
-Build for production
-
-    npm run build
-
-        Outputs compiled files to frontend/dist/.
-
-    Deploy static files
-    Copy contents of frontend/dist/ to your web server (e.g. Nginx, Apache) or a static hosting service.
