@@ -126,21 +126,14 @@ With TherapEase, the therapist enjoys a unified console for client & appointment
 
 **Backend**
 
-    Configure environment
-    Create a file backend/.env with:
+- Install dependencies
+```bash
+cd backend
+npm install
 
-MONGO_URI=<your-mongo-connection-string>
-JWT_SECRET=<your-jwt-secret>
-PORT=5000
+*Run in development*
 
-Install dependencies
-
-*cd backend*
-*npm install*
-
-Run in development
-
-*npm run dev*
+npm run dev
 
     Starts server with nodemon on port 5000.
 
@@ -148,18 +141,11 @@ Run in development
 
 **Frontend**
 
-    Configure API URL
-    In frontend/src/environments/environment.ts set:
+- Install dependencies
+```bash
+cd frontend
 
-export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:5000/api'
-};
-
-Install dependencies
-
-*cd frontend*
-*npm install*
+npm install
 
 Run in development
 
