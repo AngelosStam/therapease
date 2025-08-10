@@ -1,3 +1,5 @@
+// backend/routes/clients.js
+
 /**
  * @openapi
  * /api/clients/approved:
@@ -5,8 +7,10 @@
  *     summary: List approved clients
  *     tags:
  *       - Clients
+ *     security:
+ *       - bearerAuth: []
  *     responses:
- *       200:
+ *       200:         
  *         description: OK
  *         content:
  *           application/json:
@@ -14,13 +18,15 @@
  *               type: array
  *               items: 
  *                 $ref: '#/components/schemas/User' 
- * /api/clients/pending:
+ * /api/clients/pending:         
  *   get:
  *     summary: List pending clients
  *     tags:
  *       - Clients
+ *     security:
+ *       - bearerAuth: []
  *     responses:
- *       200:
+ *       200:         
  *         description: OK
  *         content:
  *           application/json:
@@ -33,42 +39,47 @@
  *     summary: Approve a client
  *     tags:
  *       - Clients
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               approved:
- *                 type: boolean
- *             required:
- *               - approved
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: OK         
+ *         description: Client approved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: Client not found         
  * /api/clients/reject/{id}:
- *   put:   
+ *   put:
  *     summary: Reject a client
  *     tags:
  *       - Clients
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:             
- *               approved:
- *                 type: boolean
- *             required:
- *               - approved
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - name: id 
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: OK  
+ *         description: Client rejected and deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       404:
+ *         description: Client not found  
  */
 
-// backend/routes/clients.js
 const express = require('express')
 const router = express.Router()
 const User = require('../models/User')

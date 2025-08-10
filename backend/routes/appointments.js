@@ -1,8 +1,10 @@
+// backend/routes/appointments.js
+
 /**
  * @openapi
  * /api/appointments:
  *   post:
- *     summary: Create a new appointment request (guest or logged-in client)     
+ *     summary: Create a new appointment request (guest or logged-in client)
  *     tags:
  *       - Appointments
  *     requestBody:
@@ -18,9 +20,10 @@
  *                 type: string
  *                 format: email
  *               guestPhone:
- *                 type: string (format: phone number)
- *               appointmentDate:
- *                 type: string (format: date-time)
+ *                 type: string
+ *               appointmentDate:   
+ *                 type: string
+ *                 format: date-time
  *               message:
  *                 type: string
  *             required:
@@ -34,76 +37,24 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Appointment'     
+ *               $ref: '#/components/schemas/Appointment'
  * /api/appointments:
  *   get:
  *     summary: List all requests & sessions
- *     tags:
- *       - Appointments
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items: 
- *                 $ref: '#/components/schemas/Appointment'
- * /api/appointments/my:
- *   get:   
- *     summary: Client-only: list their own approved upcoming sessions
  *     tags:     
  *       - Appointments
- *     responses:
+ *     security:             
+ *       - bearerAuth: []
+ *     responses:     
  *       200:
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
  *               type: array
- *               items: 
- *                 $ref: '#/components/schemas/Appointment' 
- * /api/appointments/:id:
- *   put:
- *     summary: Therapist-only: approve or reject an appointment request
- *     tags:
- *       - Appointments
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: string
- *                 enum:
- *                   - approved
- *                   - rejected
- *             required:
- *               - status
- *     responses:
- *       200:
- *         description: OK  
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Appointment'   
- * /api/appointments/:id:
- *   delete:     
- *     summary: Therapist-only: delete an appointment request
- *     tags:
- *       - Appointments
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Appointment'
+ *               items:
+ *                 $ref: '#/components/schemas/Appointment'     
  */
-
-// backend/routes/appointments.js
 
 const express = require('express');
 const Appointment = require('../models/Appointment');

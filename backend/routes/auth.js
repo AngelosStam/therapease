@@ -1,8 +1,10 @@
+// backend/routes/auth.js
+
 /**
  * @openapi
- * /auth/register:
+ * /api/auth/register:
  *   post:
- *     summary: Registers a new user
+ *     summary: Register a new user
  *     tags:
  *       - Authentication
  *     requestBody:
@@ -17,11 +19,11 @@
  *               lastName:
  *                 type: string
  *               phone:
- *                 type: string (format: phone number)
+ *                 type: string
  *               email:
  *                 type: string
  *                 format: email
- *               password:  
+ *               password:   
  *                 type: string
  *             required:
  *               - firstName
@@ -30,13 +32,65 @@
  *               - email
  *               - password
  *     responses:
- *       '201':
+ *       201:
  *         description: Registration successful
- *       '400':
- *         description: Bad request - missing registration fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: 
+ *                   type: string
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: 
+ *                   type: string 
+ * /api/auth/login:
+ *   post:
+ *     summary: Log in a user
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *             required:
+ *               - email               
+ *               - password
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token: 
+ *                   type: string   
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message: 
+ *                   type: string       
  */
 
-// backend/routes/auth.js
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
