@@ -1,0 +1,107 @@
+<div class="wide-card">
+    <!-- Therapist view -->
+    <ng-container *ngIf="auth.isTherapist; else clientView">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button [class.active]="activeTab==='clients'" (click)="switchTab('clients')">
+                Clients
+            </button>
+            <button [class.active]="activeTab==='access'" (click)="switchTab('access')">
+                Access Management
+            </button>
+        </div>
+
+        <!-- Clients list -->
+        <section *ngIf="activeTab==='clients'">
+            <table *ngIf="clients.length; else noClients">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>E-mail</th>
+                        <th>Since</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let c of clients">
+                        <tr>
+                            <td>{{ c.name }}</td>
+                            <td>{{ c.phone }}</td>
+                            <td>{{ c.email }}</td>
+                            <td>{{ c.createdAt | date:'mediumDate' }}</td>
+                            <td>
+                                <button (click)="toggleHistory(c._id)">
+                                    {{ showHistoryClientId===c._id ? 'Hide History' : 'Session History' }}
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="showHistoryClientId===c._id">
+                            <td colspan="5">
+                                <div class="session-history-card">
+                                    <h4>History for {{ c.name }}</h4>
+                                    <ul *ngIf="sessionsByClient.length; else noHistory">
+                                        <li *ngFor="let s of sessionsByClient">
+                                            {{ s.appointmentDate | date:'fullDate' }} –
+                                            {{ s.appointmentDate | date:'shortTime' }}
+                                        </li>
+                                    </ul>
+                                    <ng-template #noHistory>
+                                        <p>No past sessions.</p>
+                                    </ng-template>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+            <ng-template #noClients>
+                <p>No approved clients yet.</p>
+            </ng-template>
+        </section>
+
+        <!-- Access Management -->
+        <section *ngIf="activeTab==='access'">
+            <table *ngIf="pending.length; else noPending">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Requested On</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of pending">
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.email }}</td>
+                        <td>{{ p.createdAt | date:'short' }}</td>
+                        <td>
+                            <button (click)="approveClient(p._id)">Approve</button>
+                            <button class="reject" (click)="rejectClient(p._id)">Reject</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <ng-template #noPending>
+                <p>No pending registrations.</p>
+            </ng-template>
+        </section>
+    </ng-container>
+
+    <!-- Client view -->
+    <ng-template #clientView>
+        <h2>Session History</h2>
+        <div *ngIf="userSessions.length; else noSessions">
+            <ul>
+                <li *ngFor="let s of userSessions">
+                    {{ s.appointmentDate | date:'fullDate' }} –
+                    {{ s.appointmentDate | date:'shortTime' }}
+                </li>
+            </ul>
+        </div>
+        <ng-template #noSessions>
+            <p>You have no sessions yet.</p>
+        </ng-template>
+    </ng-template>
+</div>

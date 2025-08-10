@@ -1,0 +1,263 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "TherapEase API",
+        "version": "1.0.0",
+        "description": "Swagger docs for the TherapEase psychotherapy platform"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000/api",
+            "description": "Local development server"
+        }
+    ],
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "summary": "Register a new user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "firstName",
+                                    "lastName",
+                                    "phone",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "firstName": {
+                                        "type": "string"
+                                    },
+                                    "lastName": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Registration created or pending approval"
+                    },
+                    "400": {
+                        "description": "Missing or invalid data"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "Log in a user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Logged in (returns user+token)"
+                    },
+                    "400": {
+                        "description": "Invalid credentials"
+                    },
+                    "403": {
+                        "description": "Client not yet approved"
+                    }
+                }
+            }
+        },
+        "/clients/approved": {
+            "get": {
+                "summary": "List all approved clients",
+                "responses": {
+                    "200": {
+                        "description": "Array of approved clients"
+                    }
+                }
+            }
+        },
+        "/clients/pending": {
+            "get": {
+                "summary": "List pending registration requests",
+                "responses": {
+                    "200": {
+                        "description": "Array of pending clients"
+                    }
+                }
+            }
+        },
+        "/clients/approve/{id}": {
+            "put": {
+                "summary": "Approve a pending client",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Client approved"
+                    }
+                }
+            }
+        },
+        "/clients/reject/{id}": {
+            "put": {
+                "summary": "Reject a pending client",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Client rejected"
+                    }
+                }
+            }
+        },
+        "/appointments": {
+            "post": {
+                "summary": "Create a new appointment request",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "guestName": {
+                                        "type": "string"
+                                    },
+                                    "guestEmail": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "guestPhone": {
+                                        "type": "string"
+                                    },
+                                    "appointmentDate": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "message": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Appointment created"
+                    }
+                }
+            },
+            "get": {
+                "summary": "Therapist-only: list all requests & sessions",
+                "responses": {
+                    "200": {
+                        "description": "Array of all appointments"
+                    }
+                }
+            }
+        },
+        "/appointments/{id}": {
+            "put": {
+                "summary": "Therapist-only: approve (set date) or cancel",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "appointmentDate": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "approved",
+                                            "cancelled"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Appointment updated"
+                    }
+                }
+            }
+        },
+        "/appointments/my": {
+            "get": {
+                "summary": "Client-only: list your approved upcoming sessions",
+                "responses": {
+                    "200": {
+                        "description": "Array of your sessions"
+                    }
+                }
+            }
+        }
+    }
+}

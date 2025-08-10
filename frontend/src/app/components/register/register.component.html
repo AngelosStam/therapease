@@ -1,0 +1,54 @@
+<!-- src/app/components/register/register.component.html -->
+<div class="wide-card">
+    <h2>Register</h2>
+
+    <ng-container>
+        <div class="info-card">
+            <p>
+                Regular clients have the option to register so that they can book appointments online
+                and have access to their session history. <br><br>
+                The registration process is simple and takes just a few seconds.
+            </p>
+        </div>
+    </ng-container>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <label>
+            First Name *
+            <input formControlName="firstName" placeholder="Your first name" title="Enter your first name" />
+        </label>
+
+        <label>
+            Last Name *
+            <input formControlName="lastName" placeholder="Your last name" title="Enter your last name" />
+        </label>
+
+        <label>
+            Phone Number *
+            <input formControlName="phone" placeholder="+30 699 123 4567" title="Enter your phone number" />
+        </label>
+
+        <label>
+            Email *
+            <input formControlName="email" type="email" placeholder="you@example.com"
+                title="Enter your email address" />
+        </label>
+
+        <label>
+            Password *
+            <input formControlName="password" type="password" placeholder="••••••••"
+                title="Enter your password (min 6 characters)" />
+        </label>
+
+        <button type="submit" [disabled]="form.invalid">
+            Submit
+        </button>
+    </form>
+
+    <p class="success-message" *ngIf="successMessage">
+        {{ successMessage }}
+    </p>
+    <p class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+    </p>
+</div>
