@@ -7,7 +7,7 @@ Below is a detailed overview of what TherapEase offers—first from the therapis
 
 ***One-Time Setup & Secure Login***
 
-- The therapist registers using their special email (angelos_stamatis@outlook.com) and chooses a password at first login.
+- The therapist registers using their special email **(angelos_stamatis@outlook.com)** and chooses a password at first login.
 - Their account is automatically approved and given the therapist role (no waiting).
 - Subsequent logins use JWT-backed auth, keeping sessions secure.
 
@@ -23,7 +23,7 @@ Columns include:
 - Requested On – timestamp of when the request arrived.
 - Proposed Date & Time (you can edit in-line).
 - Message – expandable card for longer notes.
-- Actions – “Modify,” “Approve,” or “Cancel.”
+- Actions – “Modify,” “Approve,” or “Reject”.
 - Approving automatically moves the entry into upcoming sessions and sends the client notification.
 
 Upcoming Sessions: The sessions that the therapist has with clients.
@@ -54,13 +54,14 @@ Access Management:
 Book an Appointment
 
 - Accessible without registration under “Book an Appointment.”
-- Info Card: Highlights a free 30-minute initial consultation, encouraging guests to try the service risk-free.
+- Info Card: Highlights a free initial consultation, encouraging guests to try the service risk-free.
 - Fill in Full Name, E-mail, Phone Number, Preferred Date & Time, and an optional message.
 - On submission, you see “Appointment request submitted successfully,” and the therapist is notified.
 
 Approval Workflow
 
-- The therapist reviews your request, proposes/approves a final date & time, and you receive email confirmation.
+- The therapist reviews your request, and after he communicates with you and proposes/approves a final date & time, 
+the appointment is set.
 
 ***B. Registered Client (Ongoing Care)***
 
@@ -75,10 +76,6 @@ Logged-In Experience
 - My Account → Session History: see a chronological list of all past and upcoming sessions.
 - My Account → Bookings: view or cancel upcoming sessions.
 
-Streamlined Recurrent Booking
-
-- When scheduling, you can opt-in to “Recurrent Sessions” (e.g. weekly), automatically creating repeated appointments.
-
 ## How It Works (Workflows)
 
 ### Therapist Workflow
@@ -87,13 +84,13 @@ Streamlined Recurrent Booking
 - Click Appointments → see Requests tab.
 - Select a request → set or tweak the date/time → click Approve.
 - Switch to Upcoming Sessions → verify your calendar → modify/cancel as needed.
-- Use MyAccount → Clients to view client list & open history cards.
+- Use MyAccount → View client list & open history cards.
 - Use MyAccount → Access Management to handle new client registrations.
 
 ### Guest→Client Workflow
 
 - Guest visits Home → clicks Book an Appointment → views info card → submits request.
-- Therapist approves → you receive email → attend free consultation.
+- Therapist approves → attend free consultation.
 - If you choose to continue, register under Register tab → wait for therapist approval → log in.
 - As Client, go to Book an Appointment → pick date/time & message only → submit.
 - Use My Account to view past sessions and manage upcoming ones (modify/cancel).
