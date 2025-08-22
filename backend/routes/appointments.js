@@ -1,143 +1,38 @@
-// backend/routes/appointments.js
-
-/**
- * @openapi
- * /api/appointments:
- *   post:
- *     summary: Create a new appointment request (guest or logged-in client)
- *     tags:
- *       - Appointments
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               guestName:
- *                 type: string
- *               guestEmail:
- *                 type: string
- *                 format: email
- *               guestPhone:
- *                 type: string
- *               appointmentDate:   
- *                 type: string
- *                 format: date-time
- *               message:
- *                 type: string
- *             required:
- *               - guestName
- *               - guestEmail
- *               - guestPhone
- *               - appointmentDate
- *     responses:
- *       201:
- *         description: Created
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Appointment'
- * /api/appointments:
- *   get:
- *     summary: List all requests & sessions
- *     tags:     
- *       - Appointments
- *     security:             
- *       - bearerAuth: []
- *     responses:     
- *       200:
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Appointment'     
- */
+// routes/appointments.js
+// Wires Appointment routes to controller handlers
 
 const express = require('express');
-const Appointment = require('../models/Appointment');
-const { ensureAuth, ensureTherapist } = require('../middleware/auth');
-
 const router = express.Router();
 
-/**
- * POST /api/appointments
- * Create a new appointment request (guest or logged-in client)
- */
-router.post('/', async (req, res) => {
-    const {
-        guestName,
-        guestEmail,
-        guestPhone,
-        appointmentDate,
-        message
-    } = req.body;
+const ctrl = require('../controllers/appointmentsController');
 
-    const appt = new Appointment({
-        client: req.user && req.user.role === 'client' ? req.user._id : undefined,
-        guestName: req.user && req.user.role === 'client' ? undefined : guestName,
-        guestEmail: req.user && req.user.role === 'client' ? undefined : guestEmail,
-        guestPhone: req.user && req.user.role === 'client' ? undefined : guestPhone,
-        appointmentDate,
-        message,
-        status: 'pending'
-    });
+// Auth middleware (use whatever names your project exports)
+let mw;
+try { mw = require('../middleware/authMiddleware'); } catch { mw = {}; }
+const authenticate =
+    mw.authenticate || mw.protect || mw.verifyToken || mw.auth || ((_req, _res, next) => next());
+const requireTherapist =
+    mw.requireTherapist || mw.therapistOnly || mw.isTherapist || mw.onlyTherapist || ((_req, _res, next) => next());
 
-    const saved = await appt.save();
-    res.status(201).json(saved);
-});
+// ---------- Public / Authenticated (creating requests) ----------
+// Guests MUST be able to create requests → NO authenticate here
+router.post('/', ctrl.create);
 
-/**
- * GET /api/appointments
- * Therapist-only: list all requests & sessions
- */
-router.get('/', ensureAuth, ensureTherapist, async (req, res) => {
-    const list = await Appointment.find()
-        .populate('client', 'name email phone')
-        .sort({ createdAt: -1 });
-    res.json(list);
-});
+// ---------- Therapist lists ----------
+router.get('/', authenticate, requireTherapist, ctrl.listAll);
+router.get('/requests', authenticate, requireTherapist, ctrl.listRequests);
 
-/**
- * PUT /api/appointments/:id
- * Therapist-only: approve (set date) or cancel
- */
-router.put('/:id', ensureAuth, ensureTherapist, async (req, res) => {
-    // no more ": any" annotation here
-    const updates = {};
-    if (req.body.appointmentDate) {
-        updates.appointmentDate = req.body.appointmentDate;
-        updates.status = 'approved';
-    }
-    if (req.body.status === 'cancelled') {
-        updates.status = 'cancelled';
-    }
+// ---------- Client lists ----------
+router.get('/mine', authenticate, ctrl.listMyApproved);
 
-    const appt = await Appointment.findByIdAndUpdate(
-        req.params.id,
-        updates,
-        { new: true }
-    ).populate('client', 'name email phone');
+// ---------- Per-date & overview (therapist) ----------
+router.get('/by-date', authenticate, requireTherapist, ctrl.listByDate);
+router.get('/overview', authenticate, requireTherapist, ctrl.monthOverview);
 
-    if (!appt) {
-        return res.status(404).json({ message: 'Not found' });
-    }
-    res.json(appt);
-});
-
-/**
- * GET /api/appointments/my
- * Client-only: list their own approved upcoming sessions
- */
-router.get('/my', ensureAuth, async (req, res) => {
-    const list = await Appointment.find({
-        client: req.user._id,
-        status: 'approved'
-    }).sort({ appointmentDate: -1 });
-
-    res.json(list);
-});
+// ---------- Mutations (therapist) ----------
+router.patch('/:id', authenticate, requireTherapist, ctrl.updateDate);
+router.patch('/:id/approve', authenticate, requireTherapist, ctrl.approve);
+router.patch('/:id/reject', authenticate, requireTherapist, ctrl.rejectRequest);
+router.patch('/:id/cancel', authenticate, requireTherapist, ctrl.cancel);
 
 module.exports = router;

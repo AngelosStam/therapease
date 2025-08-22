@@ -1,46 +1,35 @@
-// backend/middleware/authMiddleware.js
-// ------------------------------------
-// Verifies JWTs and enforces role‐based access
+/**
+ * middleware/authMiddleware.js
+ * - authenticate: verifies JWT and attaches req.user
+ * - requireTherapist: ensures logged-in user is therapist
+ */
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// Middleware: verify token and attach user to req.user
-exports.protect = async (req, res, next) => {
-    let token;
-
-    // Expect header: Authorization: Bearer <token>
-    if (
-        req.headers.authorization &&
-        req.headers.authorization.startsWith('Bearer ')
-    ) {
-        token = req.headers.authorization.split(' ')[1];
-    }
-
-    if (!token) {
-        return res.status(401).json({ message: 'Not authorized, token missing' });
-    }
-
+const authenticate = async (req, res, next) => {
     try {
-        // Verify token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        // Attach user (minus password) to request
-        const user = await User.findById(decoded.id).select('-password');
-        if (!user) {
-            return res.status(401).json({ message: 'User not found' });
-        }
+        const auth = req.headers.authorization || '';
+        const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+        if (!token) return res.status(401).json({ error: 'Missing token' });
+
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(payload.id);
+        if (!user) return res.status(401).json({ error: 'Invalid token user' });
+
         req.user = user;
         next();
-    } catch (error) {
-        console.error('Auth error:', error);
-        return res.status(401).json({ message: 'Not authorized, token failed' });
+    } catch (err) {
+        err.status = 401;
+        next(err);
     }
 };
 
-// Middleware: only allow therapists
-exports.requireTherapist = (req, res, next) => {
-    if (req.user.role !== 'therapist') {
-        return res.status(403).json({ message: 'Requires therapist role' });
+const requireTherapist = (req, res, next) => {
+    if (!req.user || req.user.role !== 'therapist') {
+        return res.status(403).json({ error: 'Therapist access required' });
     }
     next();
 };
+
+module.exports = { authenticate, requireTherapist };

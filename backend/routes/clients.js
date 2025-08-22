@@ -1,147 +1,71 @@
-// backend/routes/clients.js
+// routes/clients.js
+// Therapist-facing routes for client management (list approved, list pending, approve, reject)
+
+const express = require('express');
+const router = express.Router();
 
 /**
- * @openapi
- * /api/clients/approved:
- *   get:
- *     summary: List approved clients
- *     tags:
- *       - Clients
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:         
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items: 
- *                 $ref: '#/components/schemas/User' 
- * /api/clients/pending:         
- *   get:
- *     summary: List pending clients
- *     tags:
- *       - Clients
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:         
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items: 
- *                 $ref: '#/components/schemas/User' 
- * /api/clients/approve/{id}:
- *   put:
- *     summary: Approve a client
- *     tags:
- *       - Clients
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Client approved
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       404:
- *         description: Client not found         
- * /api/clients/reject/{id}:
- *   put:
- *     summary: Reject a client
- *     tags:
- *       - Clients
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - name: id 
- *         in: path
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Client rejected and deleted
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- *       404:
- *         description: Client not found  
+ * Controllers
+ * We prefer the new names, but fall back to older aliases if your file still uses them.
  */
+const ctrl = require('../controllers/clientsController');
 
-const express = require('express')
-const router = express.Router()
-const User = require('../models/User')
+const getClients =
+    ctrl.getClients ||
+    ctrl.listClients ||
+    ctrl.getAllClients;
 
-// Middleware to protect therapist-only routes
-function ensureTherapist(req, res, next) {
-    // you probably already decode JWT and set req.user
-    if (!req.user || req.user.role !== 'therapist') {
-        return res.status(403).json({ message: 'Forbidden' })
+const getPending =
+    ctrl.getPending ||
+    ctrl.getPendingClients ||
+    ctrl.listPending;
+
+const approveClient =
+    ctrl.approveClient ||
+    ctrl.approve ||
+    ctrl.approveRegistration;
+
+const rejectClient =
+    ctrl.rejectClient ||
+    ctrl.reject ||
+    ctrl.rejectRegistration;
+
+/**
+ * Middleware
+ * Try the common names in your auth middleware; if not found, use no-op so routes still work.
+ * (Adjust these two lines to your exact exported names if you prefer stricter protection.)
+ */
+const mw = require('../middleware/authMiddleware') || {};
+const authenticate = mw.authenticate || mw.protect || mw.verifyToken || ((req, _res, next) => next());
+const requireTherapist = mw.requireTherapist || mw.therapistOnly || mw.isTherapist || ((req, _res, next) => next());
+
+/**
+ * Safety check: if any handler is still missing, throw a clear startup error
+ * (better message than Express's "callback is undefined").
+ */
+function assertHandler(fn, name) {
+    if (typeof fn !== 'function') {
+        throw new Error(
+            `clients.js: Missing controller handler "${name}". ` +
+            `Check your ../controllers/clientsController.js exports.`
+        );
     }
-    next()
 }
+assertHandler(getClients, 'getClients');
+assertHandler(getPending, 'getPending');
+assertHandler(approveClient, 'approveClient');
+assertHandler(rejectClient, 'rejectClient');
 
-// GET /api/clients/approved
-router.get('/approved', ensureTherapist, async (req, res) => {
-    try {
-        const clients = await User.find({ role: 'client', approved: true })
-            .sort({ createdAt: -1 })
-            .select('-password')  // never send hashes
-        res.json(clients)
-    } catch (err) {
-        res.status(500).json({ message: err.message })
-    }
-})
+/**
+ * Routes
+ * GET /api/clients              -> list approved clients
+ * GET /api/clients/pending      -> list pending registration requests
+ * PATCH /api/clients/:id/approve -> approve a client
+ * PATCH /api/clients/:id/reject  -> reject a client
+ */
+router.get('/', authenticate, requireTherapist, getClients);
+router.get('/pending', authenticate, requireTherapist, getPending);
+router.patch('/:id/approve', authenticate, requireTherapist, approveClient);
+router.patch('/:id/reject', authenticate, requireTherapist, rejectClient);
 
-// GET /api/clients/pending
-router.get('/pending', ensureTherapist, async (req, res) => {
-    try {
-        const clients = await User.find({ role: 'client', approved: false })
-            .sort({ createdAt: -1 })
-            .select('-password')
-        res.json(clients)
-    } catch (err) {
-        res.status(500).json({ message: err.message })
-    }
-})
-
-// PUT /api/clients/approve/:id
-router.put('/approve/:id', ensureTherapist, async (req, res) => {
-    try {
-        const client = await User.findByIdAndUpdate(
-            req.params.id,
-            { approved: true },
-            { new: true }
-        ).select('-password')
-        if (!client) return res.status(404).json({ message: 'Not found' })
-        res.json(client)
-    } catch (err) {
-        res.status(500).json({ message: err.message })
-    }
-})
-
-// PUT /api/clients/reject/:id
-router.put('/reject/:id', ensureTherapist, async (req, res) => {
-    try {
-        // you can either delete or mark a separate flag, here we delete:
-        const client = await User.findByIdAndDelete(req.params.id)
-        if (!client) return res.status(404).json({ message: 'Not found' })
-        res.json({ message: 'Rejected and deleted' })
-    } catch (err) {
-        res.status(500).json({ message: err.message })
-    }
-})
-
-module.exports = router
+module.exports = router;

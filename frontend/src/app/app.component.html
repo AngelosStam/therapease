@@ -1,5 +1,11 @@
-<!-- src/app/app.component.html -->
 <app-navbar></app-navbar>
-<main>
+
+<!-- Top loading bar -->
+<div class="topbar" *ngIf="loading.loading()"></div>
+
+<main class="container">
     <router-outlet></router-outlet>
 </main>
+
+<!-- Toasts -->
+<app-toast-container></app-toast-container>

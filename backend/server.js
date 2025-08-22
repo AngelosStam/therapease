@@ -1,66 +1,69 @@
-// backend/server.js
+/**
+ * server.js
+ * Entry point for the TherapEase backend (Express + MongoDB).
+ * - Loads env variables
+ * - Connects to MongoDB
+ * - Sets up middleware, routes, and Swagger UI
+ * - Centralized error handler
+ */
 
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const bodyParser = require('body-parser');
 
-const { authMiddleware } = require('./middleware/auth');
+// DB connection
+const connectDB = require('./config/db');
+
+// Routes
 const authRoutes = require('./routes/auth');
-const clientsRoutes = require('./routes/clients');
-const appointmentRoutes = require('./routes/appointments');
+const appointmentsRoutes = require('./routes/appointments');
+const clientRoutes = require('./routes/clients');
+
+// Swagger (correct path)
+const {
+    serve: swaggerServe,
+    setup: swaggerSetup,
+    spec: swaggerSpec,
+} = require('./swagger/swagger');
 
 const app = express();
 
-// Enable CORS for your Angular dev server
-app.use(cors({
-    origin: 'http://localhost:4200',
-    credentials: true
-}));
+// ----- Core middleware -----
+app.use(cors());
+app.use(bodyParser.json());
 
-// Parse JSON bodies
-app.use(express.json());
+// ----- Connect to MongoDB -----
+connectDB();
 
-// Decode JWT if present → req.user
-app.use(authMiddleware);
+// ----- Health check -----
+app.get('/api/health', (req, res) => {
+    res.json({ ok: true, service: 'TherapEase API', time: new Date().toISOString() });
+});
 
-// Serve Swagger UI from the static JSON spec
-app.use(
-    '/api-docs',
-    swaggerUi.serve,
-    swaggerUi.setup(swaggerDocument, { explorer: true })
-);
+// ----- API routes -----
+app.use('/api/auth', authRoutes);
+app.use('/api/appointments', appointmentsRoutes);
+app.use('/api/clients', clientRoutes);
 
-// Mount API routers
-app.use('/api/auth', authRoutes);         // registration & login
-app.use('/api/clients', clientsRoutes);      // client approval/rejection
-app.use('/api/appointments', appointmentRoutes);  // appointment booking & management
+// ----- Swagger UI -----
+app.use('/api/docs', swaggerServe, swaggerSetup(swaggerSpec));
 
-// 404 handler
+// ----- 404 handler (unknown routes) -----
 app.use((req, res) => {
-    res.status(404).json({ message: `Cannot ${req.method} ${req.originalUrl}` });
+    res.status(404).json({ error: 'Not found' });
 });
 
-// Global error handler
+// ----- Centralized error handler -----
 app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ message: err.message || 'Server error' });
+    console.error('❌ Error:', err);
+    const status = err.status || 500;
+    const message = err.message || 'Server error';
+    res.status(status).json({ error: message });
 });
 
-// Connect to MongoDB & start the server
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-    .then(() => {
-        const port = process.env.PORT || 5000;
-        app.listen(port, () =>
-            console.log(`Server running on port ${port}`)
-        );
-    })
-    .catch(err => {
-        console.error('MongoDB connection error:', err);
-        process.exit(1);
-    });
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`✅ TherapEase backend running on port ${PORT}`);
+    console.log(`📚 Swagger UI: http://localhost:${PORT}/api/docs`);
+});

@@ -1,124 +1,126 @@
-/* src/app/components/my-account/my-account.component.scss */
-
-.wide-card {
-    margin: 2rem auto;
-    padding: 2rem;
-    max-width: 1300px;
-    background: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-}
-
-.wide-card-session-history {
-    margin: 2rem auto;
-    padding: 2rem;
-    max-width: 600px;
-    background: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-}
-
-.tabs {
-    display: flex;
-    margin-bottom: 2rem;
-}
-
-.tabs button {
-    // max-width: 30%;
-    flex: 1;
-    padding: 0.5rem;
-    background: none;
-    border: 1px solid var(--color-primary);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-    color: var(--color-text);
-    text-align: center;
-}
-
-.tabs button.active {
-    background: var(--color-primary);
-    color: #fff;
-}
-
-.tabs button:not(.active):hover {
-    background: var(--color-secondary);
-    color: #fff;
+/* Container for tables */
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 table {
     width: 100%;
-    table-layout: fixed;
     border-collapse: collapse;
-    margin-bottom: 1rem;
+    table-layout: fixed;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+
+    th,
+    td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+        vertical-align: middle;
+        word-wrap: break-word;
+        gap: 8px;
+    }
 }
 
-h2 {
-    text-align: center;
+th {
+    position: sticky;
+    top: 0;
+    background-color: #f5f5f5;
+    font-weight: 500;
+    z-index: 1;
 }
 
-th,
-td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--color-border);
-    text-align: center;
-    color: var(--color-text);
+tr:last-child td {
+    border-bottom: none;
 }
 
-th:nth-child(1),
-td:nth-child(1) {
-    width: 20%;
+tr:hover {
+    background-color: rgba(0, 0, 0, 0.03);
 }
 
-th:nth-child(2),
-td:nth-child(2) {
-    width: 20%;
+/* Action buttons */
+td:last-child {
+    justify-content: center;
+    gap: 8px;
 }
 
-th:nth-child(3),
-td:nth-child(3) {
-    width: 25%;
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.3s ease;
+    opacity: 0;
+    animation: fadeInBtn 0.4s ease forwards;
 }
 
-th:nth-child(4),
-td:nth-child(4) {
-    width: 15%;
-}
-
-th:nth-child(5),
-td:nth-child(5) {
-    width: 20%;
-}
-
-button.reject {
-    border-color: #e64b4b;
-    color: #e64b4b;
-}
-
-button.reject:hover {
-    background: #e64b4b;
+.btn-primary {
+    background-color: #2a6bb0;
     color: #fff;
 }
 
+.btn-primary:hover {
+    background-color: #134a84;
+}
+
+.btn-danger {
+    background-color: #b64d58;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #961c28;
+}
+
+@keyframes fadeInBtn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---------------- Session History details card ---------------- */
 .session-history-card {
-    padding: 1rem;
-    background: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
+    text-align: left;
+    /* Align text left */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 12px 16px;
+    margin-top: 8px;
 }
 
-.session-history-card h4 {
-    margin: 0 0 0.5rem;
-    color: var(--color-primary);
-}
-
+/* Indented bullet-style list */
 .session-history-card ul {
-    padding-left: 1.2em;
     margin: 0;
-    list-style: disc inside;
+    padding-left: 20px;
+    /* indentation */
 }
 
 .session-history-card li {
-    margin-bottom: 0.5rem;
-    color: var(--color-text);
+    margin-bottom: 4px;
+    list-style-type: disc;
+    /* bullet point */
+}
+
+/* Action buttons grouped; allow wrapping within the cell */
+.action-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    /* <-- lets buttons wrap to a new line if needed */
+
+    &.center {
+        justify-content: center;
+        width: 100%;
+    }
 }

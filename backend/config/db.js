@@ -1,19 +1,27 @@
-// config/db.js
-// Handles connecting to MongoDB using mongoose
+/**
+ * config/db.js
+ * Creates a connection to MongoDB using Mongoose.
+ */
 
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+        console.error('MONGODB_URI is not set in .env');
+        process.exit(1);
+    }
+
     try {
-        // Read the MONGO_URI from environment variables
-        const conn = await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
+        await mongoose.connect(uri, {
+            // Mongoose 7 uses sensible defaults; options left for clarity
+            // useNewUrlParser: true,
+            // useUnifiedTopology: true,
         });
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
-    } catch (error) {
-        console.error('Error connecting to MongoDB:', error.message);
-        process.exit(1); // Exit process with failure
+        console.log('✅ MongoDB connected');
+    } catch (err) {
+        console.error('❌ MongoDB connection error:', err.message);
+        process.exit(1);
     }
 };
 

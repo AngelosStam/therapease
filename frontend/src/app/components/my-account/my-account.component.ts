@@ -1,78 +1,91 @@
-// src/app/components/my-account/my-account.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClientsService, Client } from '../../services/clients.service';
-import {
-    AppointmentService,
-    Appointment
-} from '../../services/appointment.service';
-import { AuthService } from '../../services/auth.service';
+import { ClientsService } from '../../core/clients.service';
+import { AppointmentService, Appointment } from '../../core/appointment.service';
+import { AuthService, User } from '../../core/auth.service';
+import { ToastService } from '../../core/toast.service';
+import { LoadingService } from '../../core/loading.service';
 
 @Component({
-    selector: 'app-my-account',
     standalone: true,
+    selector: 'app-my-account',
     imports: [CommonModule],
     templateUrl: './my-account.component.html',
-    styleUrls: ['./my-account.component.scss']
+    styleUrl: './my-account.component.scss'
 })
 export class MyAccountComponent implements OnInit {
-    // Therapist:
     activeTab: 'clients' | 'access' = 'clients';
-    clients: Client[] = [];
-    pending: Client[] = [];
-    allAppointments: Appointment[] = [];
+    clients: User[] = [];
+    pending: User[] = [];
     showHistoryClientId: string | null = null;
     sessionsByClient: Appointment[] = [];
-
-    // Client:
     userSessions: Appointment[] = [];
 
     constructor(
         public auth: AuthService,
-        private clientsService: ClientsService,
-        private apptService: AppointmentService
+        private clientsSvc: ClientsService,
+        private apptSvc: AppointmentService,
+        private toast: ToastService,
+        private loading: LoadingService
     ) { }
 
     ngOnInit(): void {
-        if (this.auth.isTherapist) {
-            this.clientsService.getApproved().subscribe(list => this.clients = list);
-            this.clientsService.getPending().subscribe(list => this.pending = list);
-            this.apptService.getAll().subscribe(list => this.allAppointments = list);
-        } else if (this.auth.isLoggedIn) {
-            this.apptService.getMine().subscribe(list => this.userSessions = list);
+        if (this.auth.isTherapist()) this.loadTherapistData();
+        if (this.auth.isLoggedIn()) {
+            this.apptSvc.listMyApproved().subscribe({ next: list => this.userSessions = list });
         }
     }
 
-    switchTab(tab: 'clients' | 'access') {
-        this.activeTab = tab;
-        this.showHistoryClientId = null;
-        this.sessionsByClient = [];
+    switchTab(tab: 'clients' | 'access') { this.activeTab = tab; }
+
+    loadTherapistData() {
+        this.clientsSvc.listApproved().subscribe({ next: d => this.clients = d });
+        this.clientsSvc.listPending().subscribe({ next: d => this.pending = d });
     }
 
     toggleHistory(clientId: string) {
-        if (this.showHistoryClientId === clientId) {
-            this.showHistoryClientId = null;
-            this.sessionsByClient = [];
-        } else {
-            this.showHistoryClientId = clientId;
-            this.sessionsByClient = this.allAppointments.filter(
-                a => a.client?._id === clientId
-            );
+        this.showHistoryClientId = this.showHistoryClientId === clientId ? null : clientId;
+        if (this.showHistoryClientId) {
+            this.apptSvc.listAll().subscribe({
+                next: list => this.sessionsByClient = list.filter(a => a.client?._id === clientId && a.appointmentDate)
+            });
         }
     }
 
     approveClient(id: string) {
-        this.clientsService.approveClient(id).subscribe(() => {
-            this.pending = this.pending.filter(c => c._id !== id);
-            this.clientsService.getApproved().subscribe(list => this.clients = list);
+        this.loading.begin();
+        this.clientsSvc.approveClient(id).subscribe({
+            next: () => {
+                this.toast.success('Client has been approved.');
+                this.loadTherapistData();
+            },
+            error: () => {
+                this.toast.error('Could not approve client. Please try again.');
+                this.loading.end();
+            },
+            complete: () => {
+                this.loading.end();
+            }
         });
     }
 
     rejectClient(id: string) {
-        if (!confirm('Reject this registration?')) return;
-        this.clientsService.rejectClient(id).subscribe(() => {
-            this.pending = this.pending.filter(c => c._id !== id);
+        this.loading.begin();
+        this.clientsSvc.rejectClient(id).subscribe({
+            next: () => {
+                this.toast.info('Client has been rejected.');
+                this.loadTherapistData();
+            },
+            error: () => {
+                this.toast.error('Could not reject client. Please try again.');
+                this.loading.end();
+            },
+            complete: () => {
+                this.loading.end();
+            }
         });
     }
+
+
+    fullName(u: User) { return `${u.firstName} ${u.lastName}`; }
 }

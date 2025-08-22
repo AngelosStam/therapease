@@ -52,7 +52,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Registration created or pending approval"
+                        "description": "Registration created or therapist account"
                     },
                     "400": {
                         "description": "Missing or invalid data"
@@ -101,7 +101,7 @@
         },
         "/clients/approved": {
             "get": {
-                "summary": "List all approved clients",
+                "summary": "List all approved clients (therapist-only)",
                 "responses": {
                     "200": {
                         "description": "Array of approved clients"
@@ -111,7 +111,7 @@
         },
         "/clients/pending": {
             "get": {
-                "summary": "List pending registration requests",
+                "summary": "List pending registration requests (therapist-only)",
                 "responses": {
                     "200": {
                         "description": "Array of pending clients"
@@ -121,7 +121,7 @@
         },
         "/clients/approve/{id}": {
             "put": {
-                "summary": "Approve a pending client",
+                "summary": "Approve a pending client (therapist-only)",
                 "parameters": [
                     {
                         "in": "path",
@@ -141,7 +141,7 @@
         },
         "/clients/reject/{id}": {
             "put": {
-                "summary": "Reject a pending client",
+                "summary": "Reject a pending client (therapist-only)",
                 "parameters": [
                     {
                         "in": "path",
@@ -161,7 +161,7 @@
         },
         "/appointments": {
             "post": {
-                "summary": "Create a new appointment request",
+                "summary": "Create a new appointment request (guest or client)",
                 "requestBody": {
                     "required": true,
                     "content": {

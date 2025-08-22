@@ -1,105 +1,114 @@
-<!-- src/app/components/appointments/appointments.component.html -->
 <div class="wide-card">
-
-    <!-- Subtabs -->
     <div class="tabs">
-        <button [class.active]="activeTab==='requests'" (click)="switchTab('requests')">
-            Appointment Requests
-        </button>
-        <button [class.active]="activeTab==='upcoming'" (click)="switchTab('upcoming')">
-            Upcoming Sessions
-        </button>
+        <button [class.active]="activeTab==='requests'" (click)="switchTab('requests')">Appointment Requests</button>
+        <button [class.active]="activeTab==='upcoming'" (click)="switchTab('upcoming')">Upcoming Sessions</button>
     </div>
 
     <!-- REQUESTS -->
     <section *ngIf="activeTab==='requests'">
-        <!-- <h2>Appointment Requests</h2> -->
-        <table *ngIf="requests.length; else noReq">
-            <thead>
-                <tr>
-                    <th>Client/Guest</th>
-                    <th>Full Name</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>Requested On</th>
-                    <th>Proposed Date &amp; Time</th>
-                    <th>Message</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <ng-container *ngFor="let r of requests">
+        <div class="table-container">
+            <!-- add table--requests class so we can size columns -->
+            <table class="table table--requests" *ngIf="requests.length; else noReq">
+                <thead>
                     <tr>
-                        <td>{{ r.client ? 'Client' : 'Guest' }}</td>
-                        <td>{{ r.client?.name || r.guestName }}</td>
-                        <td>{{ r.client?.phone || r.guestPhone || '—' }}</td>
-                        <td>{{ r.client?.email || r.guestEmail || '—' }}</td>
-                        <td>{{ r.createdAt | date:'short' }}</td>
-                        <td>
-                            <ng-container *ngIf="editingRequestId!==r._id; else editReq">
-                                {{ r.appointmentDate
-                                ? (r.appointmentDate | date:'short')
-                                : '—' }}
-                            </ng-container>
-                            <ng-template #editReq>
-                                <input type="datetime-local" [(ngModel)]="editRequestDate"
-                                    title="Select new date &amp; time" />
-                            </ng-template>
-                        </td>
-                        <td>
-                            <button (click)="toggleMessage(r._id)">
-                                {{ selectedMessageId===r._id ? 'Hide' : 'View' }}
-                            </button>
-                        </td>
-                        <td>
-                            <ng-container *ngIf="editingRequestId!==r._id; else saveReq">
-                                <button (click)="approve(r._id)">Approve</button>
-                                <button (click)="startEditRequest(r._id)">Modify</button>
-                                <button (click)="cancelRequest(r._id)">Cancel</button>
-                            </ng-container>
-                        </td>
+                        <th>Client/Guest</th>
+                        <th>Full Name</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>Requested On</th>
+                        <th>Proposed Date &amp; Time</th>
+                        <th>Message</th>
+                        <th>Action</th>
                     </tr>
+                </thead>
 
-                    <ng-template #saveReq>
+                <tbody>
+                    <ng-container *ngFor="let r of requests">
+                        <!-- Main row -->
                         <tr>
-                            <td colspan="8">
-                                <button (click)="saveEditRequest(editingRequestId!)">
-                                    Save
+                            <td>{{ r.client ? 'Client' : 'Guest' }}</td>
+                            <td>{{ r.client ? (r.client.firstName + ' ' + r.client.lastName) : r.guestName }}</td>
+                            <td>{{ r.client?.phone || r.guestPhone || '—' }}</td>
+                            <td>{{ r.client?.email || r.guestEmail || '—' }}</td>
+                            <td>{{ r.createdAt | date:'short' }}</td>
+                            <td>
+                                <ng-container *ngIf="editingRequestId!==r._id; else editReq">
+                                    {{ r.appointmentDate ? (r.appointmentDate | date:'short') : '—' }}
+                                </ng-container>
+                                <ng-template #editReq>
+                                    <label class="inline-label">
+                                        <span>New date &amp; time</span>
+                                        <input type="datetime-local" [(ngModel)]="editRequestDate"
+                                            placeholder="YYYY-MM-DD hh:mm" />
+                                    </label>
+                                </ng-template>
+                            </td>
+                            <td>
+                                <button class="btn btn-secondary" (click)="toggleMessage(r._id)">
+                                    {{ selectedMessageId===r._id ? 'Hide' : 'View' }}
                                 </button>
-                                <button (click)="cancelEditRequest()">Cancel</button>
+                            </td>
+                            <td>
+                                <ng-container *ngIf="editingRequestId!==r._id; else saveReq">
+                                    <div class="action-group action-group--requests">
+                                        <button class="btn btn-primary" (click)="approve(r._id)">Approve</button>
+                                        <button class="btn btn-primary outline"
+                                            (click)="startEditRequest(r._id)">Modify</button>
+                                        <button class="btn btn-danger" (click)="cancelRequest(r._id)">Reject</button>
+                                    </div>
+                                </ng-container>
                             </td>
                         </tr>
-                    </ng-template>
 
-                    <tr *ngIf="selectedMessageId===r._id">
-                        <td colspan="8">
-                            <div class="message-card">
-                                {{ r.message || '(no message)' }}
-                            </div>
-                        </td>
-                    </tr>
-                </ng-container>
-            </tbody>
-        </table>
+                        <!-- Save/Cancel row (separate full-width row to avoid overlap with Message column) -->
+                        <ng-template #saveReq>
+                            <tr>
+                                <td colspan="8">
+                                    <div class="action-group center">
+                                        <button class="btn btn-primary"
+                                            (click)="saveEditRequest(editingRequestId!)">Save</button>
+                                        <button class="btn btn-secondary" (click)="cancelEditRequest()">Cancel</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <!-- Message row (full width) -->
+                        <tr *ngIf="selectedMessageId===r._id">
+                            <td colspan="8">
+                                <div class="message-card">
+                                    {{ r.message || '(no message)' }}
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+
         <ng-template #noReq>
-            <p>No appointment requests.</p>
+            <p class="muted">No appointment requests.</p>
         </ng-template>
     </section>
 
     <!-- UPCOMING SESSIONS -->
     <section *ngIf="activeTab==='upcoming'">
-        <!-- <h2>Upcoming Sessions</h2> -->
-
-        <div class="calendar-header">
-            <button (click)="prevMonth()">&lt;</button>
-            <span>{{ monthNames[currentMonth] }} {{ currentYear }}</span>
-            <button (click)="nextMonth()">&gt;</button>
+        <div class="calendar-header" aria-label="Calendar navigation">
+            <button class="btn btn-secondary icon" (click)="prevMonth()" aria-label="Previous month">‹</button>
+            <span class="month-title">{{ monthNames[currentMonth] }} {{ currentYear }}</span>
+            <button class="btn btn-secondary icon" (click)="nextMonth()" aria-label="Next month">›</button>
         </div>
+
+        <!-- <div class="calendar-legend" aria-hidden="true">
+            <span class="dot has"></span> Has appointment
+        </div> -->
 
         <div class="calendar">
             <div class="week" *ngFor="let week of calendar">
                 <div class="day" *ngFor="let date of week.dates" [class.empty]="!date"
-                    [class.has-appointment]="hasAppointment(date)" (click)="onDateClick(date)">
+                    [class.has-appointment]="hasAppointment(date)" (click)="onDateClick(date)"
+                    [attr.aria-label]="date ? ('Day ' + date.getDate()) : null"
+                    [attr.aria-disabled]="!date ? 'true' : null">
                     {{ date ? date.getDate() : '' }}
                 </div>
             </div>
@@ -110,23 +119,30 @@
             <ul>
                 <li *ngFor="let a of selectedAppointments">
                     <ng-container *ngIf="editingUpcomingId!==a._id; else editUp">
-                        {{ a.appointmentDate | date:'shortTime' }} –
-                        {{ a.client?.name || a.guestName }}
-                        <button (click)="startEditUpcoming(a._id, a.appointmentDate!)">
-                            Modify
-                        </button>
-                        <button (click)="cancelAppointment(a._id)">Cancel</button>
+                        <span class="session-line">
+                            <strong>{{ a.appointmentDate | date:'shortTime' }}</strong> –
+                            {{ a.client ? (a.client.firstName + ' ' + a.client.lastName) : a.guestName }}
+                        </span>
+                        <div class="action-group">
+                            <button class="btn btn-primary outline"
+                                (click)="startEditUpcoming(a._id, a.appointmentDate!)">Modify</button>
+                            <button class="btn btn-danger" (click)="cancelAppointment(a._id)">Cancel</button>
+                        </div>
                     </ng-container>
                 </li>
             </ul>
 
             <ng-template #editUp>
-                <input type="datetime-local" [(ngModel)]="editUpcomingDate"
-                    title="Select new session date &amp; time" />
-                <button (click)="saveEditUpcoming(editingUpcomingId!)">
-                    Save
-                </button>
-                <button (click)="cancelEditUpcoming()">Cancel</button>
+                <div class="inline-editor">
+                    <label class="inline-label">
+                        <span>New date &amp; time</span>
+                        <input type="datetime-local" [(ngModel)]="editUpcomingDate" placeholder="YYYY-MM-DD hh:mm" />
+                    </label>
+                    <div class="action-group">
+                        <button class="btn btn-primary" (click)="saveEditUpcoming(editingUpcomingId!)">Save</button>
+                        <button class="btn btn-secondary" (click)="cancelEditUpcoming()">Cancel</button>
+                    </div>
+                </div>
             </ng-template>
         </div>
     </section>

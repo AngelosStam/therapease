@@ -1,0 +1,62 @@
+<div class="wide-card">
+    <h2>Register</h2>
+
+    <ng-container>
+        <div class="info-card message-card">
+            <p>
+                Regular clients have the option to register so that they can book appointments online
+                and have access to their session history. <br><br>
+                The registration process is simple and takes just a few seconds.
+            </p>
+        </div>
+    </ng-container>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <label>
+            First Name *
+            <input formControlName="firstName" placeholder="Enter your first name" />
+            <div class="error-text" *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
+                First name is required.
+            </div>
+        </label>
+
+        <label>
+            Last Name *
+            <input formControlName="lastName" placeholder="Enter your last name" />
+            <div class="error-text" *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
+                Last name is required.
+            </div>
+        </label>
+
+        <label>
+            Phone Number *
+            <input formControlName="phone" placeholder="Enter your phone number" />
+            <div class="error-text" *ngIf="form.controls.phone.touched && form.controls.phone.invalid">
+                Phone is required.
+            </div>
+        </label>
+
+        <label>
+            Email *
+            <input formControlName="email" type="email" placeholder="you@example.com" />
+            <div class="error-text" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+                Please enter a valid email.
+            </div>
+        </label>
+
+        <label>
+            Password *
+            <input formControlName="password" type="password" placeholder="Minimum 6 characters" />
+            <div class="error-text" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+                Password must be at least 6 characters.
+            </div>
+        </label>
+
+        <button type="submit" [disabled]="form.invalid || busy" [attr.aria-busy]="busy ? 'true' : null">
+            {{ busy ? 'Submitting…' : 'Submit' }}
+        </button>
+    </form>
+
+    <p class="success-message" *ngIf="successMessage">{{ successMessage }}</p>
+    <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+</div>

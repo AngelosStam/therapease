@@ -1,140 +1,143 @@
-/* src/styles.scss */
-/* ---------------- */
-
-/* 1. Montserrat font */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-
-/* 2. Minimal color variables */
 :root {
-    --font-family: 'Montserrat', sans-serif;
-    --color-primary: #5A7CA8;
-    --color-text: #333333;
-    --color-border: #EEEEEE;
-    --color-card-bg: #FFFFFF;
-    --border-radius: 8px;
+    --bg-overlay: rgba(255, 255, 255, 0.65);
+    --text: #163042;
+    --muted: #4f6b7a;
+    // --primary: #2c6f93;
+    --primary: #2a6bb0;
+    --primary-contrast: #fff;
+    --card: #ffffff;
+    --border: #e7eef3;
+    --danger: #b73a3a;
+    --success: #2f8a4b;
 }
 
-/* 3. Global reset */
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
-/* 4. Body with full-bleed hero image */
+html,
 body {
-    font-family: var(--font-family);
-    color: var(--color-text);
-    background: url('assets/hero-background-wide.jpg') no-repeat center center fixed;
-    background-size: cover;
-    min-height: 100vh;
-    overflow-x: hidden;
+    height: 100%;
 }
 
-/* 5. Base card style (no shadows, minimal border) */
+body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--text);
+    background:
+        linear-gradient(0deg, var(--bg-overlay), var(--bg-overlay)),
+        url('/hero-background-wide.jpg') center/cover fixed no-repeat;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
 .wide-card {
-    background: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    padding: 3rem;
-    margin: 2rem auto;
-    max-width: 720px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.25rem;
+    margin: 1rem auto;
+    // max-width: 960px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    animation: fadeIn 400ms ease-out both;
 }
 
-/* 6. Typography */
-h1,
-h2,
-h3,
-h4,
-h5 {
-    font-family: var(--font-family);
-    color: var(--color-primary);
-    margin-bottom: 1rem;
+.wide-card h2 {
+    margin: 0 0 0 0;
+    font-weight: 600;
+    letter-spacing: 0.2px;
 }
 
-p,
-li,
-label {
-    line-height: 1.75;
-    color: var(--color-text);
+.wide-card .message-card {
+    padding: 0.75rem 1rem;
+    background: #f8fbfd;
+    border: 1px solid var(--border);
+    border-radius: 12px;
 }
 
-/* 7. Links as text with underline on hover */
-a {
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: text-decoration 0.2s;
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
-/* 8. Ghost / text buttons */
-button {
-    font-family: var(--font-family);
-    background: none;
-    border: 1px solid var(--color-primary);
-    color: var(--color-primary);
-    border-radius: var(--border-radius);
-    padding: 0.5rem 1.25rem;
+.tabs button {
+    background: #f0f6fa;
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s;
 }
 
-button:hover:not(:disabled) {
-    background: var(--color-primary);
-    color: #fff;
+.tabs button.active {
+    background: var(--primary);
+    color: var(--primary-contrast);
+    border-color: var(--primary);
 }
 
-button:disabled {
-    border-color: var(--color-border);
-    color: var(--color-border);
-    cursor: not-allowed;
+form label {
+    display: block;
+    margin: 0.5rem 0;
 }
 
-/* 9. Form elements */
+input,
+textarea,
+select,
+button {
+    font: inherit;
+}
+
 input,
 textarea,
 select {
-    font-family: var(--font-family);
-    padding: 0.6rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    transition: border-color 0.2s;
+    width: 100%;
+    padding: 0.6rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    outline: none;
+    background: #fbfeff;
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-    border-color: var(--color-primary);
-    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(44, 111, 147, 0.15);
 }
 
-/* 10. Utility wrappers */
-main,
-.content-wrapper {
-    padding: 1rem;
-    text-align: center;
+button {
+    background: var(--primary);
+    color: var(--primary-contrast);
+    border: 1px solid var(--primary);
+    border-radius: 12px;
+    padding: 0.6rem 0.9rem;
+    cursor: pointer;
 }
 
-.cards-wrapper app-wide-card .wide-card {
-    opacity: 0;
-    animation: fadeInUp 0.6s ease-in-out forwards;
+button.reject {
+    background: #fff;
+    color: var(--danger);
+    border-color: var(--danger);
 }
 
-.cards-wrapper app-wide-card:nth-child(1) .wide-card {
-    animation-delay: 0.2s;
+.success,
+.success-message {
+    color: var(--success);
 }
 
-.cards-wrapper app-wide-card:nth-child(2) .wide-card {
-    animation-delay: 0.4s;
+.error,
+.error-message {
+    color: var(--danger);
 }
 
-@keyframes fadeInUp {
+@keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(6px);
     }
 
     to {
@@ -143,14 +146,31 @@ main,
     }
 }
 
-/* 11. Footer card, narrow to fit content */
-.footer-card {
-    background: var(--color-card-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    padding: 1.5rem 2rem;
-    display: inline-block;
-    margin: 2rem auto 3rem;
-    color: var(--color-text);
-    font-size: 0.9rem;
+/* Small helpers for forms */
+.help {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.error-text {
+    font-size: 0.85rem;
+    color: var(--danger);
+    margin-top: 4px;
+}
+
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+    border-color: #e5a3a3;
+    box-shadow: 0 0 0 3px rgba(210, 80, 80, 0.12);
+}
+
+button[aria-busy="true"] {
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.toast-title,
+.toast-message {
+    text-align: center;
 }

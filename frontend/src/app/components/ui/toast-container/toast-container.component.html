@@ -1,0 +1,6 @@
+<div class="toast-wrap" *ngIf="toasts.toasts().length">
+    <div class="toast" *ngFor="let t of toasts.toasts(); trackBy: trackById" [class]="t.type">
+        <span class="text">{{ t.text }}</span>
+        <button class="close" aria-label="Dismiss" (click)="toasts.dismiss(t.id)">×</button>
+    </div>
+</div>
