@@ -32,7 +32,7 @@ const rejectClient =
 
 /**
  * Middleware
- * Try the common names in your auth middleware; if not found, use no-op so routes still work.
+ * Try the common names in auth middleware; if not found, use no-op so routes still work.
  * (Adjust these two lines to your exact exported names if you prefer stricter protection.)
  */
 const mw = require('../middleware/authMiddleware') || {};
@@ -63,9 +63,77 @@ assertHandler(rejectClient, 'rejectClient');
  * PATCH /api/clients/:id/approve -> approve a client
  * PATCH /api/clients/:id/reject  -> reject a client
  */
+
+/**
+ * @swagger
+ * /api/clients:
+ *   get:
+ *     summary: List all approved clients (therapist-only)
+ *     tags: [Clients]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success - list of all approved clients    
+ *       401:
+ *         description: Unauthorized                  
+ */
 router.get('/', authenticate, requireTherapist, getClients);
+
+/**
+ * @swagger
+ * /api/clients/pending:
+ *   get:
+ *     summary: List all pending registration requests (therapist-only)
+ *     tags: [Clients]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success - list of all pending registration requests    
+ *       401:
+ *         description: Unauthorized        
+ */
 router.get('/pending', authenticate, requireTherapist, getPending);
+
+/**
+ * @swagger
+ * /api/clients/{id}:
+ *   patch:
+ *     summary: Approve or reject a client (therapist-only)
+ *     tags: [Clients]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success - updated client    
+ *       401:
+ *         description: Unauthorized    
+ *       403:
+ *         description: Forbidden    
+ *       404:
+ *         description: Not found       
+ */
 router.patch('/:id/approve', authenticate, requireTherapist, approveClient);
+
+/**
+ * @swagger
+ * /api/clients/{id}:
+ *   patch:
+ *     summary: Approve or reject a client (therapist-only)
+ *     tags: [Clients]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success - updated client    
+ *       401:
+ *         description: Unauthorized    
+ *       403:
+ *         description: Forbidden    
+ *       404:
+ *         description: Not found       
+ */
 router.patch('/:id/reject', authenticate, requireTherapist, rejectClient);
 
 module.exports = router;

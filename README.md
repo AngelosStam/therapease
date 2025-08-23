@@ -104,7 +104,7 @@ With TherapEase, the therapist enjoys a unified console for client & appointment
 ### Prerequisites
 
 - Node.js ≥ 16 & npm  
-- MongoDB instance  
+- MongoDB instance (tested with MongoDB Community Edition)  
 - Angular CLI (globally):  
   ```bash
   npm install -g @angular/cli
