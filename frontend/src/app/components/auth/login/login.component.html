@@ -1,0 +1,27 @@
+<div class="wide-card">
+    <h2>Login</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <label>
+            E-mail *
+            <input formControlName="email" type="email" placeholder="you@example.com" />
+            <div class="error-text" *ngIf="form.controls.email.touched && form.controls.email.invalid">
+                Please enter a valid email.
+            </div>
+        </label>
+
+        <label>
+            Password *
+            <input formControlName="password" type="password" placeholder="Enter your password" />
+            <div class="error-text" *ngIf="form.controls.password.touched && form.controls.password.invalid">
+                Password is required.
+            </div>
+        </label>
+
+        <button type="submit" [disabled]="form.invalid || busy" [attr.aria-busy]="busy ? 'true' : null">
+            {{ busy ? 'Signing in…' : 'Login' }}
+        </button>
+    </form>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+</div>

@@ -1,0 +1,392 @@
+/* Match MyAccount table/card style */
+
+/* Table container for sticky header scrolling and small-screen safety */
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* Full-width, equal-ish columns with card styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+
+    th,
+    td {
+        padding: 8px 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+        vertical-align: middle;
+        word-wrap: break-word;
+    }
+}
+
+/* Sticky header */
+th {
+    position: sticky;
+    top: 0;
+    background-color: #f5f5f5;
+    font-weight: 500;
+    z-index: 1;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Column sizing for the Requests table */
+.table--requests {
+
+    th:nth-child(1),
+    td:nth-child(1) {
+        width: 92px;
+    }
+
+    /* Client/Guest */
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 150px;
+    }
+
+    /* Full Name */
+
+    th:nth-child(3),
+    td:nth-child(3) {
+        width: 120px;
+    }
+
+    /* Phone */
+
+    th:nth-child(4),
+    td:nth-child(4) {
+        width: 180px;
+    }
+
+    /* Email */
+
+    th:nth-child(5),
+    td:nth-child(5) {
+        width: 120px;
+    }
+
+    /* Requested On */
+
+    th:nth-child(6),
+    td:nth-child(6) {
+        width: 170px;
+    }
+
+    /* Proposed Date & Time */
+
+    th:nth-child(7),
+    td:nth-child(7) {
+        width: 92px;
+    }
+
+    /* Message */
+
+    // th:nth-child(8),
+    // td:nth-child(8) {
+    //     width: 50px;
+    // }
+
+    /* Actions column follows naturally */
+
+    // th:nth-child(9),
+    // td:nth-child(9) {
+    //     width: 270px;
+    // }
+}
+
+/* Inline label for date editors */
+.inline-label {
+    text-align: left;
+    gap: 6px;
+    flex-wrap: wrap;
+
+    span {
+        white-space: nowrap;
+        font-size: 0.88rem;
+        color: #333;
+    }
+
+    input[type='datetime-local'] {
+        padding: 6px 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font: inherit;
+        min-width: 190px;
+    }
+}
+
+/* Action buttons grouped; allow wrapping within the cell */
+.action-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+
+    &.center {
+        justify-content: left;
+        width: 100%;
+    }
+}
+
+/* Compact the requests-row buttons slightly so they fit comfortably */
+.action-group--requests .btn {
+    padding: 5px 10px;
+    font-size: 0.88rem;
+}
+
+/* Buttons — same palette/animation as MyAccount */
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.3s ease;
+    opacity: 0;
+    animation: fadeInBtn 0.4s ease forwards;
+
+    &.icon {
+        padding: 6px 10px;
+        font-weight: 600;
+    }
+}
+
+/* Primary (Approve/Save) */
+.btn-primary {
+    background-color: #2a6bb0;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #134a84;
+}
+
+/* Primary outline (Modify) */
+.btn-primary.outline {
+    background: #fff;
+    color: #2a6bb0;
+    border: 1px solid #2a6bb0;
+}
+
+.btn-primary.outline:hover {
+    background: #e9f1fb;
+}
+
+/* Danger (Reject/Cancel) */
+.btn-danger {
+    background-color: #b64d58;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #961c28;
+}
+
+/* Secondary (View/Cancel edit, nav arrows) */
+.btn-secondary {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+.btn-secondary:hover {
+    background-color: #dce1e6;
+}
+
+/* Fade-in animation */
+@keyframes fadeInBtn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Message card (View message) */
+.message-card {
+    text-align: left;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 12px 16px;
+}
+
+/* Muted paragraph for "no data" states */
+.muted {
+    opacity: 0.8;
+}
+
+/* Calendar styling */
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 28px 4px;
+
+    .month-title {
+        font-weight: 600;
+        letter-spacing: 0.2px;
+    }
+}
+
+.calendar {
+    display: grid;
+    gap: 6px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+
+    .week {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+    }
+
+    .day {
+        height: 42px;
+        border-radius: 8px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        transition: box-shadow 0.15s ease, transform 0.06s ease;
+
+        &.empty {
+            background: #f8f9fa;
+            border-style: solid;
+            cursor: default;
+        }
+
+        &.has-appointment {
+            border-color: #2a6bb0;
+            background: #2a6bb0;
+            color: #fff;
+        }
+
+        &:hover:not(.empty) {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+    }
+}
+
+.details-card {
+    margin-top: 12px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 12px 16px;
+
+    h3 {
+        margin: 0 0 8px 0;
+        color: #2a6bb0;
+        font-weight: 600;
+    }
+
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li+li {
+            margin-top: 8px;
+        }
+    }
+
+    .session-line {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .inline-editor {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        // display: flex;
+        // align-items: center;
+        // gap: 12px;
+        // margin: 10px 0 6px;
+    }
+}
+
+/* Filters & sortable headers */
+// .filters {
+//     display: flex;
+//     align-items: center;
+//     gap: 12px;
+//     margin: 10px 0 6px;
+
+//     label {
+//         font-size: 0.95rem;
+//         color: #333;
+
+//         input {
+//             // margin-left: 8px;
+//             padding: 6px 8px;
+//             border: 1px solid #ccc;
+//             border-radius: 6px;
+//             min-width: 240px;
+//             font: inherit;
+//         }
+//     }
+// }
+
+.filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0 6px;
+    margin-bottom: 12px;
+
+    label {
+        font-size: 0.95rem;
+        color: #333;
+        margin-right: 6px;
+    }
+
+    input {
+        padding: 6px 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        min-width: 305px;
+        font: inherit;
+        font-size: 0.95rem;
+    }
+}
+
+.sortable {
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.sortable .arrow {
+    margin-left: 6px;
+    font-size: 0.8rem;
+    color: #2a6bb0;
+}
+
+.wide-card {
+    margin-top: 0.8rem;
+    // width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}

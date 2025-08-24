@@ -1,0 +1,68 @@
+<div class="wide-card">
+    <h2>Book an Appointment</h2>
+
+    <ng-container *ngIf="!auth.isLoggedIn()">
+        <div class="info-card message-card">
+            <p>
+                At TherapEase, we offer a <strong>free 30-minute first consultation</strong> to help us get to know each
+                other.<br />
+                This is an opportunity to discuss your needs, ask questions, and explore how we can work together in
+                therapy.<br /><br />
+                <strong>Feel free to contact us to schedule your initial consultation and start your journey toward
+                    well-being.</strong><br /><br />
+                Please enter your preferred date and time of appointment in the form below, and we'll get back to you as
+                soon as possible.
+            </p>
+        </div>
+    </ng-container>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <ng-container *ngIf="!auth.isLoggedIn()">
+            <label>
+                Full Name *
+                <input formControlName="guestName" placeholder="Enter your full name" />
+                <div class="error-text" *ngIf="form.controls.guestName.touched && form.controls.guestName.invalid">
+                    Your name is required.
+                </div>
+            </label>
+
+            <label>
+                E-mail *
+                <input formControlName="guestEmail" type="email" placeholder="you@example.com" />
+                <div class="error-text" *ngIf="form.controls.guestEmail.touched && form.controls.guestEmail.invalid">
+                    A valid email is required.
+                </div>
+            </label>
+
+            <label>
+                Phone Number *
+                <input formControlName="guestPhone" placeholder="Enter your phone number" />
+                <div class="error-text" *ngIf="form.controls.guestPhone.touched && form.controls.guestPhone.invalid">
+                    Your phone number is required.
+                </div>
+            </label>
+        </ng-container>
+
+        <label>
+            Preferred Date &amp; Time *
+            <input formControlName="appointmentDate" type="datetime-local" placeholder="YYYY-MM-DD hh:mm" />
+            <div class="error-text"
+                *ngIf="form.controls.appointmentDate.touched && form.controls.appointmentDate.invalid">
+                Please select a preferred date & time.
+            </div>
+        </label>
+
+        <label>
+            Message
+            <textarea formControlName="message" placeholder="Add an optional message for the therapist"></textarea>
+            <div class="help">Anything you'd like to add before the first session.</div>
+        </label>
+
+        <button type="submit" [disabled]="form.invalid || busy" [attr.aria-busy]="busy ? 'true' : null">
+            {{ busy ? 'Sending…' : 'Submit Request' }}
+        </button>
+    </form>
+
+    <p class="success" *ngIf="success">Appointment request submitted successfully</p>
+    <p class="error" *ngIf="error">{{ error }}</p>
+</div>

@@ -1,0 +1,25 @@
+main.container {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+}
+
+/* Slim loading bar shown during requests */
+.topbar {
+    position: sticky;
+    top: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg, #9dd3ed, var(--primary));
+    animation: loading 1s linear infinite;
+    z-index: 50;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 200px 0;
+    }
+}

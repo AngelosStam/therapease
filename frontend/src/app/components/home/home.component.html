@@ -1,0 +1,57 @@
+<div class="home-container">
+    <h1 class="title">TherapEase</h1>
+
+    <div class="cards-container">
+        <div class="wide-card" [class.expanded]="showWhy()" (click)="toggleWhy()">
+            <h2>Why TherapEase?</h2>
+            <div class="card-content" *ngIf="showWhy()">
+                <p>
+                    Our name, <strong>TherapEase</strong>, is a blend of the words <em>“Therapy”</em> and
+                    <em>“Ease”</em>. It reflects our core mission — to make access to mental health support
+                    as simple, comfortable, and stress-free as possible.<br />
+                </p>
+                <p>
+                    We believe that seeking help should feel empowering, not overwhelming. At
+                    <strong>TherapEase</strong>, we are dedicated to creating a safe and supportive
+                    environment where clients can focus on their growth, healing, and overall
+                    well-being with confidence and clarity.
+                </p>
+            </div>
+        </div>
+
+        <div class="wide-card" [class.expanded]="showCbt()" (click)="toggleCbt()">
+            <h2>What is CBT?</h2>
+            <div class="card-content" *ngIf="showCbt()">
+                <p>
+                    <strong>Cognitive Behavioral Therapy (CBT)</strong> is a structured, short-term therapy that helps
+                    people identify and change negative patterns in their thoughts and behaviors. It's based on the idea
+                    that how we think affects how we feel and act.<br />
+                </p>
+                <p>
+                    CBT can help with a variety of issues such as <strong>anxiety, depression, stress, OCD</strong>,
+                    and <strong>PTSD</strong>. Instead of focusing on the past, it works on solving current problems
+                    by teaching practical skills.
+                </p>
+                <ul>
+                    <li>Recognize negative or distorted thinking</li>
+                    <li>Replace it with more realistic, helpful thoughts</li>
+                    <li>Develop healthier responses and coping strategies</li>
+                </ul>
+                <p>
+                    CBT usually lasts between <strong>5 and 20 sessions</strong> with practical exercises to apply in
+                    everyday life. It’s one of the most effective and research-supported psychotherapies today.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer-card">
+        <div class="footer-content">
+            <strong>TherapEase</strong> | Angelos Stamatis<br />
+            BSc Psychology – MSc Clinical Neuropsychology – CBT<br />
+            <a href="mailto:angelos_stamatis@outlook.com">angelos_stamatis@outlook.com</a>
+            <hr class="footer-line" />
+            &copy;2025 THERAPEASE
+        </div>
+    </footer>
+</div>

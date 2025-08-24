@@ -1,0 +1,273 @@
+<div class="wide-card">
+    <!-- Therapist view -->
+    <ng-container *ngIf="auth.isTherapist(); else clientView">
+        <div class="tabs">
+            <button [class.active]="activeTab==='clients'" (click)="switchTab('clients')"
+                title="Clients tab">Clients</button>
+            <button [class.active]="activeTab==='access'" (click)="switchTab('access')"
+                title="Access Management tab">Access Management</button>
+        </div>
+
+        <!-- Clients list -->
+        <section *ngIf="activeTab==='clients'">
+            <div class="filters">
+                <label for="clientSearch">Search clients:</label>
+                <input id="clientSearch" type="text" [(ngModel)]="clientFilter"
+                    placeholder="Type name, phone or email..." />
+            </div>
+
+            <div class="table-container">
+                <table *ngIf="clients.length; else noClients">
+                    <thead>
+                        <tr>
+                            <th (click)="sortClients('name')" class="sortable" scope="col" aria-label="Sort by name">
+                                Client Full Name
+                                <span class="arrow" *ngIf="clientSort.key==='name'">{{ clientSort.dir==='asc' ? '▲' :
+                                    '▼' }}</span>
+                            </th>
+                            <th (click)="sortClients('phone')" class="sortable" scope="col" aria-label="Sort by phone">
+                                Phone Number
+                                <span class="arrow" *ngIf="clientSort.key==='phone'">{{ clientSort.dir==='asc' ? '▲' :
+                                    '▼' }}</span>
+                            </th>
+                            <th (click)="sortClients('email')" class="sortable" scope="col" aria-label="Sort by email">
+                                E-mail
+                                <span class="arrow" *ngIf="clientSort.key==='email'">{{ clientSort.dir==='asc' ? '▲' :
+                                    '▼' }}</span>
+                            </th>
+                            <th (click)="sortClients('since')" class="sortable" scope="col" aria-label="Sort by since">
+                                Since
+                                <span class="arrow" *ngIf="clientSort.key==='since'">{{ clientSort.dir==='asc' ? '▲' :
+                                    '▼' }}</span>
+                            </th>
+                            <th scope="col">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let c of filteredAndSortedClients()">
+                            <tr>
+                                <td>{{ fullName(c) }}</td>
+                                <td>{{ c.phone }}</td>
+                                <td>{{ c.email }}</td>
+                                <td>{{ (c.approvedAt || c.createdAt) | date:'mediumDate' }}</td>
+                                <td>
+                                    <div class="action-group">
+                                        <button class="btn btn-secondary" (click)="openSchedule(c)"
+                                            title="Schedule a session">Schedule Session</button>
+                                        <button class="btn btn-primary" (click)="toggleHistory(c._id)"
+                                            title="Toggle session history">{{ showHistoryClientId===c._id ? 'Hide
+                                            History' : 'Session History' }}</button>
+                                        <button class="btn btn-primary outline" (click)="toggleNotes(c._id)"
+                                            title="Open client notes">{{ openNotesClientId===c._id ? 'Close Notes' :
+                                            'Open Notes' }}</button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- History (cancelled sessions are filtered out in TS) -->
+                            <tr *ngIf="showHistoryClientId===c._id">
+                                <td colspan="5">
+                                    <div class="session-history-card message-card">
+                                        <h4>History for {{ fullName(c) }}</h4>
+
+                                        <!-- Recurring series controls removed per your request -->
+
+                                        <ul *ngIf="sessionsByClient.length; else noHistory">
+                                            <li *ngFor="let s of sessionsByClient">
+                                                <div class="session-line">
+                                                    <strong>{{ s.appointmentDate | date:'fullDate' }}</strong>
+                                                    –
+                                                    {{ s.appointmentDate | date:'shortTime' }}
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <ng-template #noHistory>
+                                            <p>No past sessions.</p>
+                                        </ng-template>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Notes panel (inline row) -->
+                            <tr *ngIf="openNotesClientId===c._id">
+                                <td colspan="5">
+                                    <section class="notes-panel" aria-label="Client notes">
+                                        <h4>Notes for {{ fullName(c) }}</h4>
+
+                                        <div class="note-create">
+                                            <label for="noteDraft">Add a note</label>
+                                            <textarea id="noteDraft" [(ngModel)]="noteDraft" rows="3"
+                                                placeholder="Write a new note..."></textarea>
+                                            <div class="note-actions">
+                                                <button class="btn btn-primary" (click)="addNote(c._id)"
+                                                    title="Save note">Save</button>
+                                                <button class="btn btn-secondary" (click)="cancelNoteDraft()"
+                                                    title="Clear draft">Clear</button>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="notesLoading" class="muted">Loading notes…</div>
+                                        <ul class="note-list" *ngIf="clientNotes[c._id]?.length">
+                                            <li *ngFor="let n of clientNotes[c._id]">
+                                                <div class="note-header">
+                                                    <time [attr.datetime]="n.createdAt">
+                                                        {{ n.createdAt | date:'fullDate' }} — {{ n.createdAt |
+                                                        date:'shortTime' }}
+                                                    </time>
+                                                </div>
+                                                <div class="note-body" *ngIf="editNoteId!==n._id">{{ n.text }}</div>
+
+                                                <!-- Edit form -->
+                                                <div class="note-edit" *ngIf="editNoteId===n._id">
+                                                    <label [attr.for]="'edit_'+n._id">Edit note</label>
+                                                    <textarea [id]="'edit_'+n._id" [(ngModel)]="editNoteDraft" rows="3"
+                                                        placeholder="Update note text"></textarea>
+                                                    <div class="note-actions">
+                                                        <button class="btn btn-primary" (click)="saveNote(c._id, n._id)"
+                                                            title="Update note">Update</button>
+                                                        <button class="btn btn-secondary" (click)="cancelEditNote()"
+                                                            title="Cancel editing">Cancel</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="note-row-actions" *ngIf="editNoteId!==n._id">
+                                                    <button class="btn btn-primary outline"
+                                                        (click)="startEditNote(n._id, n.text)"
+                                                        title="Edit note">Edit</button>
+                                                    <button class="btn btn-danger" (click)="deleteNote(c._id, n._id)"
+                                                        title="Delete note">Delete</button>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <div *ngIf="clientNotes[c._id] && clientNotes[c._id].length===0" class="muted">
+                                            No notes yet.</div>
+                                    </section>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+            <ng-template #noClients>
+                <p>No approved clients yet.</p>
+            </ng-template>
+        </section>
+
+        <!-- Access Management -->
+        <section *ngIf="activeTab==='access'">
+            <div class="filters">
+                <label for="pendingSearch">Search pending:</label>
+                <input id="pendingSearch" type="text" [(ngModel)]="pendingFilter"
+                    placeholder="Type name, phone or email..." />
+            </div>
+
+            <div class="table-container">
+                <table *ngIf="pending.length; else noPending">
+                    <thead>
+                        <tr>
+                            <th (click)="sortPending('name')" class="sortable" scope="col" aria-label="Sort by name">
+                                Client Full Name
+                                <span class="arrow" *ngIf="pendingSort.key==='name'">{{ pendingSort.dir==='asc' ? '▲' :
+                                    '▼' }}</span>
+                            </th>
+                            <th (click)="sortPending('phone')" class="sortable" scope="col" aria-label="Sort by phone">
+                                Phone Number
+                                <span class="arrow" *ngIf="pendingSort.key==='phone'">{{ pendingSort.dir==='asc' ? '▲' :
+                                    '▼' }}</span>
+                            </th>
+                            <th (click)="sortPending('email')" class="sortable" scope="col" aria-label="Sort by email">
+                                Email
+                                <span class="arrow" *ngIf="pendingSort.key==='email'">{{ pendingSort.dir==='asc' ? '▲' :
+                                    '▼' }}</span>
+                            </th>
+                            <th (click)="sortPending('requested')" class="sortable" scope="col"
+                                aria-label="Sort by requested on">
+                                Requested On
+                                <span class="arrow" *ngIf="pendingSort.key==='requested'">{{ pendingSort.dir==='asc' ?
+                                    '▲' : '▼' }}</span>
+                            </th>
+                            <th scope="col">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of filteredAndSortedPending()">
+                            <td>{{ fullName(p) }}</td>
+                            <td>{{ p.phone }}</td>
+                            <td>{{ p.email }}</td>
+                            <td>{{ p.createdAt | date:'short' }}</td>
+                            <td>
+                                <div class="action-group">
+                                    <button class="btn btn-primary" (click)="approveClient(p._id)"
+                                        title="Approve client">Approve</button>
+                                    <button class="btn btn-danger" (click)="rejectClient(p._id)"
+                                        title="Reject client">Reject</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ng-template #noPending>
+                <p>No pending registrations.</p>
+            </ng-template>
+        </section>
+    </ng-container>
+
+    <!-- Client view -->
+    <ng-template #clientView>
+        <h2>Session History</h2>
+        <div *ngIf="userSessions.length; else noSessions">
+            <ul>
+                <li *ngFor="let s of userSessions">
+                    {{ s.appointmentDate | date:'fullDate' }} – {{ s.appointmentDate | date:'shortTime' }}
+                </li>
+            </ul>
+        </div>
+        <ng-template #noSessions>
+            <p>You have no sessions yet.</p>
+        </ng-template>
+    </ng-template>
+</div>
+
+<!-- ===== Schedule Dialog (inline modal) ===== -->
+<div class="modal-backdrop" *ngIf="scheduleOpen" (click)="closeSchedule()" title="Close schedule dialog"></div>
+<div class="modal-card" *ngIf="scheduleOpen" role="dialog" aria-labelledby="schedTitle" aria-modal="true">
+    <div class="modal-header">
+        <h3 id="schedTitle">Schedule Session for {{ schedulingClient ? fullName(schedulingClient) : '' }}</h3>
+        <button class="icon-close" (click)="closeSchedule()" aria-label="Close">×</button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-row">
+            <label for="dt">Date &amp; Time</label>
+            <input id="dt" type="datetime-local" [(ngModel)]="scheduleForm.datetimeLocal"
+                placeholder="YYYY-MM-DD hh:mm" />
+        </div>
+
+        <div class="form-row">
+            <label for="rec">Repeat</label>
+            <select id="rec" [(ngModel)]="scheduleForm.frequency">
+                <option value="none">Does not repeat</option>
+                <option value="weekly">Weekly</option>
+                <option value="biweekly">Every 2 weeks</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </div>
+
+        <div class="form-row" *ngIf="scheduleForm.frequency!=='none'">
+            <label for="until">Repeat until</label>
+            <input id="until" type="date" [(ngModel)]="scheduleForm.endDate" placeholder="YYYY-MM-DD" />
+        </div>
+
+        <div class="hint" *ngIf="scheduleForm.frequency!=='none'">
+            Sessions will repeat at the selected interval until the end date (inclusive).
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="closeSchedule()">Cancel</button>
+        <button class="btn btn-primary" (click)="confirmSchedule()">Schedule</button>
+    </div>
+</div>

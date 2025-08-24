@@ -1,0 +1,21 @@
+<nav class="navbar">
+    <div class="left">
+        <div class="hamburger" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+            <button class="hamburger-icon" aria-label="Menu" (click)="toggleMenu()">☰</button>
+            <ul class="menu" [class.open]="menuOpen">
+                <li><a routerLink="/">Home</a></li>
+                <li *ngIf="!auth.isTherapist()"><a routerLink="/book">Book an Appointment</a></li>
+                <li *ngIf="!auth.isLoggedIn()"><a routerLink="/register">Register</a></li>
+                <li *ngIf="!auth.isLoggedIn()"><a routerLink="/login">Login</a></li>
+                <li *ngIf="auth.isTherapist()"><a routerLink="/appointments">Appointments</a></li>
+                <li *ngIf="auth.isLoggedIn()"><a routerLink="/my-account">MyAccount</a></li>
+                <li *ngIf="auth.isLoggedIn()"><button (click)="logout()">Logout</button></li>
+            </ul>
+        </div>
+        <a routerLink="/" class="brand">TherapEase</a>
+    </div>
+
+    <div class="greeting" *ngIf="auth.isLoggedIn() && auth.user() as u">
+        {{ u.firstName }} {{ u.lastName }}
+    </div>
+</nav>
