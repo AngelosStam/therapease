@@ -145,4 +145,5 @@ Launches ng serve --open on http://localhost:4200.
 👨‍💻 Author
 
 Angelos Stamatis
+
 Final Project for Coding Factory (Athens University of Economics & Business)
