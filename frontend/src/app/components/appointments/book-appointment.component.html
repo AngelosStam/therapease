@@ -22,7 +22,7 @@
                 Full Name *
                 <input formControlName="guestName" placeholder="Enter your full name" />
                 <div class="error-text" *ngIf="form.controls.guestName.touched && form.controls.guestName.invalid">
-                    Your name is required.
+                    * Your name is required.
                 </div>
             </label>
 
@@ -30,7 +30,7 @@
                 E-mail *
                 <input formControlName="guestEmail" type="email" placeholder="you@example.com" />
                 <div class="error-text" *ngIf="form.controls.guestEmail.touched && form.controls.guestEmail.invalid">
-                    A valid email is required.
+                    * A valid email is required.
                 </div>
             </label>
 
@@ -38,7 +38,7 @@
                 Phone Number *
                 <input formControlName="guestPhone" placeholder="Enter your phone number" />
                 <div class="error-text" *ngIf="form.controls.guestPhone.touched && form.controls.guestPhone.invalid">
-                    Your phone number is required.
+                    * Your phone number is required.
                 </div>
             </label>
         </ng-container>
@@ -48,7 +48,7 @@
             <input formControlName="appointmentDate" type="datetime-local" placeholder="YYYY-MM-DD hh:mm" />
             <div class="error-text"
                 *ngIf="form.controls.appointmentDate.touched && form.controls.appointmentDate.invalid">
-                Please select a preferred date & time.
+                * Please select a preferred date & time.
             </div>
         </label>
 

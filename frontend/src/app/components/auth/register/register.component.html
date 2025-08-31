@@ -16,7 +16,7 @@
             First Name *
             <input formControlName="firstName" placeholder="Enter your first name" />
             <div class="error-text" *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
-                First name is required.
+                * First name is required.
             </div>
         </label>
 
@@ -24,7 +24,7 @@
             Last Name *
             <input formControlName="lastName" placeholder="Enter your last name" />
             <div class="error-text" *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
-                Last name is required.
+                * Last name is required.
             </div>
         </label>
 
@@ -32,7 +32,7 @@
             Phone Number *
             <input formControlName="phone" placeholder="Enter your phone number" />
             <div class="error-text" *ngIf="form.controls.phone.touched && form.controls.phone.invalid">
-                Phone is required.
+                * Phone is required.
             </div>
         </label>
 
@@ -40,7 +40,7 @@
             Email *
             <input formControlName="email" type="email" placeholder="you@example.com" />
             <div class="error-text" *ngIf="form.controls.email.touched && form.controls.email.invalid">
-                Please enter a valid email.
+                * Please enter a valid email.
             </div>
         </label>
 
@@ -48,7 +48,7 @@
             Password *
             <input formControlName="password" type="password" placeholder="Minimum 6 characters" />
             <div class="error-text" *ngIf="form.controls.password.touched && form.controls.password.invalid">
-                Password must be at least 6 characters.
+                * Password must be at least 6 characters.
             </div>
         </label>
 
