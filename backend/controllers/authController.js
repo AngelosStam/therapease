@@ -21,7 +21,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Adjust path if your structure differs
 
-const THERAPIST_EMAIL = 'angelos_stamatis@outlook.com';
+const THERAPIST_EMAIL = 'therapease@outlook.com';
 
 /** Helper: sign JWT for approved users */
 function signToken(user) {

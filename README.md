@@ -9,7 +9,7 @@ It provides a unified digital workspace where the therapist can manage clients, 
 
 ***One-Time Setup & Secure Login***
 
-- The therapist registers using their special email **(angelos_stamatis@outlook.com)** and chooses a password at first login.
+- The therapist registers using their special email **(therapease@outlook.com)** and chooses a password at first login.
 - Their account is automatically approved and given the therapist role (no waiting).
 - Subsequent logins use JWT-backed auth, keeping sessions secure.
 
@@ -105,7 +105,7 @@ Approving moves the entry into *Upcoming Sessions*. Rejected requests are exclud
 
 ### Prerequisites
 - Node.js ≥ 16 & npm  
-- MongoDB instance (tested with MongoDB Community Edition)  
+- MongoDB instance (tested with MongoDB Community Edition - Community Server)  
 - Angular CLI (globally):  
   ```bash
   npm install -g @angular/cli

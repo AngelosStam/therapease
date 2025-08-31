@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 
 // The only therapist allowed to approve/reject per project spec.
-const THERAPIST_EMAIL = 'angelos_stamatis@outlook.com';
+const THERAPIST_EMAIL = 'therapease@outlook.com';
 
 /**
  * Helper to assert the caller is the main therapist.
