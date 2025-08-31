@@ -110,7 +110,7 @@ Approving moves the entry into *Upcoming Sessions*. Rejected requests are exclud
   ```bash
   npm install -g @angular/cli
 
-### Clone repository:
+- Clone repository:
   ```bash 
   git clone https://github.com/AngelosStam/therapease.git
   cd therapease
