@@ -17,8 +17,6 @@ function monthWindow(year, month) {
     return { start, end };
 }
 
-// --- Existing endpoints unchanged ---
-
 exports.create = async (req, res) => {
     try {
         const payload = { ...req.body };
